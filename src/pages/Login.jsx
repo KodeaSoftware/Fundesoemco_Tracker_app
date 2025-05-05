@@ -1,12 +1,14 @@
+import LoginComponent from "../ui/LoginComponent";
+
 function Login() {
   return (
-    <div>
-      <h1>Login</h1>
-      <form>
-        <input type="text" placeholder="Username" />
-        <input type="password" placeholder="Password" />
-        <button type="submit">Login</button>
-      </form>
+    <div className="bg-gray-50 w-screen h-screen flex relative items-center p-20 overflow-hidden ">
+      <LoginComponent />
+      <img
+        src="img-login.webp"
+        alt="trabajadores"
+        className="absolute right-[-600px] "
+      />
     </div>
   );
 }
