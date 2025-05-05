@@ -9,21 +9,22 @@ import {
   NavigationMenuViewport,
 } from "@/components/ui/navigation-menu";
 import { Link } from "react-router-dom";
+import { CiUser } from "react-icons/ci";
 
 function Header(props) {
   return (
     <>
       <header
-        className=" h-13 flex items-center gap-5 font-[Noto sans]  px-4 shadow-md absolute top-0 z-10 
+        className=" h-15 flex items-center gap-5 font-[Noto sans]  px-4 absolute top-0 z-10 
      left-0 right-0 
-     bg-white w-full border-solid"
+     bg-white w-full border"
       >
         <img
           src="fundesoemco-logo.png"
           alt="fundesoemco-logo"
           className="w-10"
         />
-        <h2 className="text-xl font-semibold">{props.pageTitle}</h2>
+        <h2 className="font-semibold">{props.pageTitle}</h2>
         <NavigationMenu>
           <NavigationMenuList>
             <NavigationMenuItem>
@@ -51,6 +52,14 @@ function Header(props) {
             </NavigationMenuItem>
           </NavigationMenuList>
         </NavigationMenu>
+        <div className="ml-auto flex items-center gap-4">
+          <Link
+            to="/login"
+            className="text-sm text-gray-500 hover:text-gray-700"
+          >
+            Cerrar sesión
+          </Link>
+        </div>
       </header>
     </>
   );
