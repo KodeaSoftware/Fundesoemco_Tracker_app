@@ -28,12 +28,19 @@ function LoginComponent() {
 
         <Input placeholder="" />
 
-        <Link className="text-sm text-[#00BF40] absolute right-0 bottom-40">
+        <Link
+          className="text-sm text-[#00BF40] absolute right-0 bottom-40"
+          to="/forgot-password"
+        >
           ¿Olvidaste tu contraseña?
         </Link>
         <Button
           type="submit"
           className="w-full mt-4 bg-[#00BF40] hover:bg-[#00a636] cursor-pointer "
+          onClick={(e) => {
+            e.preventDefault();
+            location.href = "/";
+          }}
         >
           Iniciar Sesión
         </Button>
