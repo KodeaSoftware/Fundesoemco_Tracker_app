@@ -1,8 +1,9 @@
+import Header from "../ui/Header";
+
 function Dashboard() {
   return (
-    <div>
-      <h1>Dashboard</h1>
-      <p>Welcome to the dashboard!</p>
+    <div className="bg-gray-100 w-screen h-screen flex relative items-center p-20 overflow-hidden ">
+      <Header pageTitle="Dashboard" />
     </div>
   );
 }
