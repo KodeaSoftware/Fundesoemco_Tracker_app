@@ -1,15 +1,10 @@
-import "./App.css";
-import getUsers from "./utils/test.js";
+import { Button } from "@/components/ui/button";
 
 function App() {
-  getUsers();
-
   return (
-    <>
-      <div>
-        <h1>Main</h1>
-      </div>
-    </>
+    <div className="flex flex-col items-center justify-center min-h-svh">
+      <Button>Click me</Button>
+    </div>
   );
 }
 
