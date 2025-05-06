@@ -44,7 +44,6 @@ function Header(props) {
                 <NavigationMenuLink>
                   <Link to="new-coordinator">Crear coordinador</Link>
                 </NavigationMenuLink>
-
                 <NavigationMenuLink>
                   <Link to="project-list">Lista de proyectos</Link>
                 </NavigationMenuLink>
