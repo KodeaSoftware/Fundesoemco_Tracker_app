@@ -1,15 +1,16 @@
 import Header from "../ui/Header";
-import PresentesHoyCard from "../ui/PresentesHoyCard";
-import AusentesHoyCard from "../ui/AusentesHoyCard";
-import HorasPromedioCard from "../ui/HorasPromedioCard";
-import AsistenciaMensualCard from "../ui/AsistenciaMensualCard";
-import RegistroAsistencia from "../ui/RegistroAsistencia";
+import PresentesHoyCard from "../ui/dashboard/PresentesHoyCard";
+import AusentesHoyCard from "../ui/dashboard/AusentesHoyCard";
+import HorasPromedioCard from "../ui/dashboard/HorasPromedioCard";
+import AsistenciaMensualCard from "../ui/dashboard/AsistenciaMensualCard";
+import RegistroAsistencia from "../ui/dashboard/RegistroAsistencia";
 // eslint-disable-next-line no-unused-vars
 import { motion } from "motion/react";
+import PageLayout from "../layout/PageLayout";
 
 function Dashboard() {
   return (
-    <div className="bg-gray-50 w-screen min-h-screen overflow-hidden">
+    <PageLayout>
       <Header pageTitle="Dashboard" />
       <motion.div
         initial={{ opacity: 0, x: -10 }}
@@ -28,7 +29,7 @@ function Dashboard() {
           <RegistroAsistencia />
         </div>
       </motion.div>
-    </div>
+    </PageLayout>
   );
 }
 

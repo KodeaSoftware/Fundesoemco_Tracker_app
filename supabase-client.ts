@@ -1,3 +1,5 @@
+// Archivo inicial de configuración y conexion con supabase
+
 import { createClient } from "@supabase/supabase-js";
 
 const SUPABASEURL = import.meta.env.VITE_SUPABASE_URL; // URL de Supabase

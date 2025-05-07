@@ -28,7 +28,7 @@ function Header(props) {
           alt="fundesoemco-logo"
           className="w-10"
         />
-        <h2 className="font-semibold">{props.pageTitle}</h2>
+        <h2 className="font-semibold w-[150px] ">{props.pageTitle}</h2>
         <NavigationMenu>
           <NavigationMenuList>
             <NavigationMenuItem>

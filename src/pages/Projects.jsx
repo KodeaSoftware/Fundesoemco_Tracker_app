@@ -1,11 +1,21 @@
+// React
+import { useState } from "react";
+
+// Layout
+import PageLayout from "../layout/PageLayout";
+
+// Componentes
 import Header from "../ui/Header";
 import ProjectCard from "../ui/projects/ProjectCard";
+
+// Componentes shadcn
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { IoAddCircleOutline } from "react-icons/io5";
 import { TbArchive } from "react-icons/tb";
-import CreateProject from "../ui/CreateProject";
-import { useState } from "react";
+import CreateProject from "../ui/modales/CreateProject";
+
+// motion animaciones
 // eslint-disable-next-line no-unused-vars
 import { AnimatePresence, motion } from "motion/react";
 
@@ -13,7 +23,7 @@ function Projects() {
   const [modal, setModal] = useState(false);
 
   return (
-    <div className="bg-gray-50 w-screen min-h-screen overflow-hidden ">
+    <PageLayout>
       <Header pageTitle="Lista de proyectos" />
       <motion.div
         initial={{ opacity: 0, x: -10 }}
@@ -72,7 +82,7 @@ function Projects() {
           {modal && <CreateProject actionBack={() => setModal(!modal)} />}
         </AnimatePresence>
       </motion.div>
-    </div>
+    </PageLayout>
   );
 }
 

@@ -7,7 +7,6 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { IoBusinessOutline } from "react-icons/io5";
-import { Button } from "@/components/ui/button";
 import { FaRegCalendarAlt } from "react-icons/fa";
 
 function ProjectCard(props) {
