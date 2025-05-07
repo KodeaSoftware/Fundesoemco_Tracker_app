@@ -3,18 +3,30 @@ import ProjectCard from "../ui/projects/ProjectCard";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { IoAddCircleOutline } from "react-icons/io5";
-import NuevoProyectoModal from "../ui/modales/NuevoProyectoModal";
+import { TbArchive } from "react-icons/tb";
+import CreateProject from "./CreateProject";
+import { useState } from "react";
 
 function Projects() {
+  const [modal, setModal] = useState(false);
+
   return (
     <div className="bg-gray-50 w-screen min-h-screen overflow-hidden ">
       <Header pageTitle="Lista de proyectos" />
-      <div className="flex flex-row  mb-10 mt-20 pl-9 pr-9 gap-3 items-center w-full ">
-        <Input className="w-100 bg-gray-50 " placeholder="Buscar proyecto" />
-
-        <Button className="bg-[#00BF40] hover:bg-[#00a636] cursor-pointer">
-          Crear proyecto
-          <IoAddCircleOutline />
+      <div className="flex flex-row  mb-10 mt-20 pl-9 pr-9 gap-3 items-center justify-between w-full ">
+        <div className="flex gap-4">
+          <Input className="w-100 bg-white " placeholder="Buscar proyecto" />
+          <Button
+            className="bg-[#00BF40] hover:bg-[#00a636] cursor-pointer"
+            onClick={() => setModal(!modal)}
+          >
+            Crear Proyecto
+            <IoAddCircleOutline />
+          </Button>
+        </div>
+        <Button className="bg-white  border hover:bg-gray-200 cursor-pointer text-black">
+          Proyectos archivados
+          <TbArchive />
         </Button>
       </div>
 
@@ -47,6 +59,8 @@ function Projects() {
         />
       </div>
       <div className="w-full h-full flex items-center p-10 pt-0"></div>
+
+      {modal && <CreateProject actionBack={() => setModal(!modal)} />}
     </div>
   );
 }

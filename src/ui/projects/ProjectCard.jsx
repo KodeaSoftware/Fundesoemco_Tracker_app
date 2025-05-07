@@ -12,7 +12,7 @@ import { FaRegCalendarAlt } from "react-icons/fa";
 
 function ProjectCard(props) {
   return (
-    <div className=" w-full  ">
+    <div className=" w-full hover:scale-102 transition-all duration-300 ease-in-out cursor-pointer ">
       <Card className=" gap-2 ">
         <CardHeader>
           <CardTitle className="flex items-center justify-between text-base font-semibold ">

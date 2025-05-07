@@ -9,7 +9,11 @@ import {
   NavigationMenuViewport,
 } from "@/components/ui/navigation-menu";
 import { Link } from "react-router-dom";
-import { CiUser } from "react-icons/ci";
+import { FiUsers } from "react-icons/fi";
+import { FiUserPlus } from "react-icons/fi";
+import { LuUserCog } from "react-icons/lu";
+import { RxDashboard } from "react-icons/rx";
+import { GoProjectRoadmap } from "react-icons/go";
 
 function Header(props) {
   return (
@@ -30,23 +34,84 @@ function Header(props) {
             <NavigationMenuItem>
               <NavigationMenuTrigger>Inicio</NavigationMenuTrigger>
               <NavigationMenuContent>
-                <NavigationMenuLink>
-                  <Link to="/">Dashboard</Link>
-                </NavigationMenuLink>
+                <div className="w-[120px] flex flex-col gap-3 font-[Noto sans]">
+                  <NavigationMenuLink>
+                    <Link
+                      to="/"
+                      className="flex flex-wrap gap-2 font-semibold justify-between"
+                    >
+                      Dashboard
+                      <RxDashboard className="text-black-100" />
+                    </Link>
+                  </NavigationMenuLink>
+                </div>
               </NavigationMenuContent>
             </NavigationMenuItem>
+          </NavigationMenuList>
+        </NavigationMenu>
+        <NavigationMenu>
+          <NavigationMenuList>
             <NavigationMenuItem>
               <NavigationMenuTrigger>Proyectos</NavigationMenuTrigger>
               <NavigationMenuContent>
-                <NavigationMenuLink>
-                  <Link to="new-employee">Crear empleado</Link>
-                </NavigationMenuLink>
-                <NavigationMenuLink>
-                  <Link to="new-coordinator">Crear coordinador</Link>
-                </NavigationMenuLink>
-                <NavigationMenuLink>
-                  <Link to="project-list">Lista de proyectos</Link>
-                </NavigationMenuLink>
+                <div className="w-[200px] flex flex-col gap-3 font-[Noto sans]">
+                  <NavigationMenuLink>
+                    <Link
+                      to="/project-list"
+                      className="flex flex-wrap gap-2 font-semibold justify-between"
+                    >
+                      Lista de proyectos
+                      <GoProjectRoadmap className="text-black-100" />
+                    </Link>
+                  </NavigationMenuLink>
+                </div>
+              </NavigationMenuContent>
+            </NavigationMenuItem>
+          </NavigationMenuList>
+        </NavigationMenu>
+        <NavigationMenu>
+          <NavigationMenuList>
+            <NavigationMenuItem>
+              <NavigationMenuTrigger>RRHH</NavigationMenuTrigger>
+              <NavigationMenuContent>
+                <div className="w-[200px] flex flex-col gap-3 font-[Noto sans]">
+                  <NavigationMenuLink>
+                    <Link
+                      to="/employee-list"
+                      className="flex flex-wrap gap-2 font-semibold justify-between "
+                    >
+                      Lista de empleados
+                      <FiUsers className="text-black-100" />
+                    </Link>
+                  </NavigationMenuLink>
+                  <NavigationMenuLink>
+                    <Link
+                      to="/employee-list"
+                      className="flex flex-wrap gap-2 font-semibold justify-between"
+                    >
+                      Lista de coordinadores
+                      <LuUserCog className="text-black-100" />
+                    </Link>
+                  </NavigationMenuLink>
+                  <NavigationMenuLink>
+                    <Link
+                      to="employee-list"
+                      className="flex flex-wrap gap-2 font-semibold justify-between"
+                    >
+                      Crear empleado
+                      <FiUserPlus className="text-back-100" />
+                    </Link>
+                  </NavigationMenuLink>
+                  <NavigationMenuLink>
+                    <Link
+                      to="employee-list"
+                      className="flex flex-wrap gap-2 justify-between font-semibold"
+                    >
+                      Crear coordinador
+                      <FiUserPlus className="text-black-100" />
+                    </Link>
+                  </NavigationMenuLink>
+                </div>
               </NavigationMenuContent>
             </NavigationMenuItem>
           </NavigationMenuList>

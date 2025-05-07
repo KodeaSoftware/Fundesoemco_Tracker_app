@@ -3,6 +3,7 @@ import Login from "../pages/Login";
 import ForgotPassword from "../pages/ForgotPassword";
 import Dashboard from "../pages/Dashboard";
 import Projects from "../pages/Projects";
+import CreateProject from "../pages/CreateProject";
 
 const AppRoutes = () => {
   return (
