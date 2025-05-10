@@ -1,46 +1,32 @@
 // React
-import { useState } from "react";
 
 // Layout
 import PageLayout from "../layout/PageLayout";
 
 // Componentes
-import Header from "../ui/Header";
-import ProjectCard from "../ui/projects/ProjectCard";
+import Header from "../elements/Header";
+import ProjectCard from "../elements/ProjectCard";
 
 // Componentes shadcn
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { IoAddCircleOutline } from "react-icons/io5";
 import { TbArchive } from "react-icons/tb";
-import CreateProject from "../ui/modales/CreateProject";
 
 // motion animaciones
 // eslint-disable-next-line no-unused-vars
 import { AnimatePresence, motion } from "motion/react";
+import { pageAnimationsParams } from "../motion/pageAnimation";
+import CreateProject from "../elements/CreateProject";
 
 function Projects() {
-  const [modal, setModal] = useState(false);
-
   return (
     <PageLayout>
       <Header pageTitle="Lista de proyectos" />
-      <motion.div
-        initial={{ opacity: 0, x: -10 }}
-        animate={{ opacity: 1, x: 0 }}
-        exit={{ opacity: 0, x: 10 }}
-        transition={{ duration: 0.2, ease: "easeOut" }}
-      >
+      <motion.div {...pageAnimationsParams}>
         <div className="flex flex-row  mb-10 mt-20 pl-9 pr-9 gap-3 items-center justify-between w-full ">
           <div className="flex gap-4">
             <Input className="w-100 bg-white " placeholder="Buscar proyecto" />
-            <Button
-              className="bg-[#00BF40] hover:bg-[#00a636] cursor-pointer"
-              onClick={() => setModal(!modal)}
-            >
-              Crear Proyecto
-              <IoAddCircleOutline />
-            </Button>
+            <CreateProject />
           </div>
           <Button className="bg-white  border hover:bg-gray-200 cursor-pointer text-black">
             Proyectos archivados
@@ -78,9 +64,7 @@ function Projects() {
         </div>
         <div className="w-full h-full flex items-center p-10 pt-0"></div>
 
-        <AnimatePresence>
-          {modal && <CreateProject actionBack={() => setModal(!modal)} />}
-        </AnimatePresence>
+        <AnimatePresence exitBeforeEnter></AnimatePresence>
       </motion.div>
     </PageLayout>
   );
