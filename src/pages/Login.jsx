@@ -1,5 +1,5 @@
 // Componentes
-import LoginComponent from "../ui/login/LoginComponent";
+import LoginComponent from "../elements/LoginComponent";
 
 // Motion animaciones
 // eslint-disable-next-line no-unused-vars
