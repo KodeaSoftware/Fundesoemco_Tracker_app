@@ -1,9 +1,13 @@
 // PageLayout es un componente dictamina el layout general de las paginas
 // Modificar para poder aplicar reglas de estilo generales a todas las /pages
 
-function PageLayout({ children }) {
+// addStyle es para agregar clases personalizadas de tailwind donde sea que
+// se llame el componente para más personalización
+function PageLayout({ children, addStyle }) {
   return (
-    <div className="bg-gray-50 w-screen min-h-screen overflow-hidden">
+    <div
+      className={`bg-gray-50 w-full min-h-screen overflow-hidden ${addStyle}`}
+    >
       {children}
     </div>
   );
