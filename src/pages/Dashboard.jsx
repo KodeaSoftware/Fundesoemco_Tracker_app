@@ -1,23 +1,24 @@
-import Header from "../ui/Header";
-import PresentesHoyCard from "../ui/dashboard/PresentesHoyCard";
-import AusentesHoyCard from "../ui/dashboard/AusentesHoyCard";
-import HorasPromedioCard from "../ui/dashboard/HorasPromedioCard";
-import AsistenciaMensualCard from "../ui/dashboard/AsistenciaMensualCard";
-import RegistroAsistencia from "../ui/dashboard/RegistroAsistencia";
+// Layout
+import PageLayout from "../layout/PageLayout";
+
+// Componentes
+import Header from "../elements/Header";
+import PresentesHoyCard from "../elements/PresentesHoyCard";
+import AusentesHoyCard from "../elements/AusentesHoyCard";
+import HorasPromedioCard from "../elements/HorasPromedioCard";
+import AsistenciaMensualCard from "../elements/AsistenciaMensualCard";
+import RegistroAsistencia from "../elements/RegistroAsistencia";
+
+// motion animaciones
 // eslint-disable-next-line no-unused-vars
 import { motion } from "motion/react";
-import PageLayout from "../layout/PageLayout";
+import { pageAnimationsParams } from "../motion/pageAnimation";
 
 function Dashboard() {
   return (
     <PageLayout>
       <Header pageTitle="Dashboard" />
-      <motion.div
-        initial={{ opacity: 0, x: -10 }}
-        animate={{ opacity: 1, x: 0 }}
-        exit={{ opacity: 0, x: 10 }}
-        transition={{ duration: 0.2, ease: "easeOut" }}
-      >
+      <motion.div {...pageAnimationsParams}>
         <div className="px-9 py-20 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 pb-10">
           <PresentesHoyCard />
           <AusentesHoyCard />
