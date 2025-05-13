@@ -86,29 +86,11 @@ function Header(props) {
                   </NavigationMenuLink>
                   <NavigationMenuLink>
                     <Link
-                      to="/employee-list"
+                      to="/coordinator-list"
                       className="flex flex-wrap gap-2 font-semibold justify-between"
                     >
                       Lista de coordinadores
                       <LuUserCog className="text-black-100" />
-                    </Link>
-                  </NavigationMenuLink>
-                  <NavigationMenuLink>
-                    <Link
-                      to="employee-list"
-                      className="flex flex-wrap gap-2 font-semibold justify-between"
-                    >
-                      Crear empleado
-                      <FiUserPlus className="text-back-100" />
-                    </Link>
-                  </NavigationMenuLink>
-                  <NavigationMenuLink>
-                    <Link
-                      to="employee-list"
-                      className="flex flex-wrap gap-2 justify-between font-semibold"
-                    >
-                      Crear coordinador
-                      <FiUserPlus className="text-black-100" />
                     </Link>
                   </NavigationMenuLink>
                 </div>

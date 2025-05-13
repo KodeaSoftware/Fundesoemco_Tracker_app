@@ -7,6 +7,7 @@ import ForgotPassword from "../pages/ForgotPassword";
 import Dashboard from "../pages/Dashboard";
 import Projects from "../pages/Projects";
 import Employees from "../pages/Employees";
+import Coordinator from "../pages/Coordinator";
 
 // Animate presence para animaciónes entre paginas
 import { AnimatePresence } from "motion/react";
@@ -21,6 +22,7 @@ const AppRoutes = () => {
         <Route path="/" element={<Dashboard />} />
         <Route path="/project-list" element={<Projects />} />
         <Route path="/employee-list" element={<Employees />} />
+        <Route path="/coordinator-list" element={<Coordinator />} />
       </Routes>
     </AnimatePresence>
   );
