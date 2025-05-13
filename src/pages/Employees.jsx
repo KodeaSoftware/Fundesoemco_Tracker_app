@@ -19,6 +19,7 @@ const employees = [
     department: "IT",
     phone: "123-456-7890",
     cargo: "Developer",
+    contrato: "directo",
   },
   {
     id: 1023456789,
@@ -26,6 +27,7 @@ const employees = [
     department: "HR",
     phone: "234-567-8901",
     cargo: "HR Manager",
+    contrato: "directo",
   },
   {
     id: 1012345678,
@@ -33,6 +35,7 @@ const employees = [
     department: "Finance",
     phone: "345-678-9012",
     cargo: "Accountant",
+    contrato: "contratista",
   },
   {
     id: 1009876543,
@@ -40,6 +43,7 @@ const employees = [
     department: "Marketing",
     phone: "456-789-0123",
     cargo: "Marketing Specialist",
+    contrato: "contratista",
   },
   {
     id: 1098765432,
@@ -47,6 +51,7 @@ const employees = [
     department: "Sales",
     phone: "567-890-1234",
     cargo: "Sales Executive",
+    contrato: "directo",
   },
   {
     id: 1087654321,
@@ -54,6 +59,7 @@ const employees = [
     department: "IT",
     phone: "678-901-2345",
     cargo: "System Analyst",
+    contrato: "contratista",
   },
   {
     id: 1076543210,
@@ -61,6 +67,7 @@ const employees = [
     department: "HR",
     phone: "789-012-3456",
     cargo: "Recruiter",
+    contrato: "directo",
   },
   {
     id: 1065432109,
@@ -68,6 +75,7 @@ const employees = [
     department: "Finance",
     phone: "890-123-4567",
     cargo: "Financial Analyst",
+    contrato: "directo",
   },
   {
     id: 1054321098,
@@ -75,6 +83,7 @@ const employees = [
     department: "Marketing",
     phone: "901-234-5678",
     cargo: "Content Creator",
+    contrato: "contratista",
   },
   {
     id: 1043210987,
@@ -82,6 +91,7 @@ const employees = [
     department: "Sales",
     phone: "012-345-6789",
     cargo: "Sales Manager",
+    contrato: "directo",
   },
 ];
 
