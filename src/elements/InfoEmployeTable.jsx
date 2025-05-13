@@ -26,6 +26,7 @@ export const InfoEmployeTable = ({ data }) => {
             <TableHead>Departamento</TableHead>
             <TableHead>Cargo</TableHead>
             <TableHead>Teléfono</TableHead>
+            <TableHead>Contrato</TableHead>
             <TableHead className="text-center">Acciones</TableHead>
           </TableRow>
         </TableHeader>
@@ -38,6 +39,8 @@ export const InfoEmployeTable = ({ data }) => {
               <TableCell>{item.department}</TableCell>
               <TableCell className="font-semibold">{item.cargo}</TableCell>
               <TableCell>{item.phone}</TableCell>
+              <TableCell>{item.contrato}</TableCell>
+
               <TableCell className="text-center">
                 <EditEmployee
                   name={item.name}
