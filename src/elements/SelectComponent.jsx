@@ -10,17 +10,20 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-export default function SelectComponent() {
+export default function SelectComponent({ label, options = [], onChange }) {
   return (
-    <Select>
+    <Select onValueChange={onChange}>
       <SelectTrigger className="w-[280px] cursor-pointer">
-        <SelectValue placeholder="Selecciona un proyecto" />
+        <SelectValue placeholder="Selecciona una opción" />
       </SelectTrigger>
       <SelectContent>
         <SelectGroup>
-          <SelectLabel>Proyectos</SelectLabel>
-          <SelectItem value="cvc">CVC</SelectItem>
-          <SelectItem value="fundesoemco">Fundesoemco</SelectItem>
+          {label && <SelectLabel>{label}</SelectLabel>}
+          {options.map((option) => (
+            <SelectItem key={option.value} value={option.value}>
+              {option.label}
+            </SelectItem>
+          ))}
         </SelectGroup>
       </SelectContent>
     </Select>
