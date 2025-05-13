@@ -14,8 +14,21 @@ import { Textarea } from "@/components/ui/textarea";
 import { IoBusinessOutline } from "react-icons/io5";
 import { FiUserPlus } from "react-icons/fi";
 import SelectComponent from "./SelectComponent";
+import { useState } from "react";
 
 function CreateEmployee() {
+  const [selectedContrato, setSelectedContrato] = useState("");
+  const [selectedProyectos, setSelectedProyectos] = useState();
+
+  const OPCIONES_CONTRATO = [
+    { value: "contratista", label: "Contratista" },
+    { value: "directo", label: "Directo" },
+  ];
+
+  const OPCIONES_PROYECTOS = [
+    { value: "cvc", label: "CVC" },
+    { value: "Fundesoemco", label: "Fundesoemco" },
+  ];
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -82,6 +95,18 @@ function CreateEmployee() {
                 Cargo
               </label>
               <Input id="employee-role" placeholder="Ej: Analista" />
+
+              <label
+                htmlFor="employee-role"
+                className="text-sm font-medium text-gray-700"
+              >
+                Contrato
+              </label>
+              <SelectComponent
+                label="Tipo de contrato"
+                options={OPCIONES_CONTRATO}
+                onChange={(value) => setSelectedContrato(value)}
+              />
             </div>
           </div>
 
@@ -94,7 +119,11 @@ function CreateEmployee() {
               >
                 Proyectos Asignados
               </label>
-              <SelectComponent />
+              <SelectComponent
+                label="Tipo de contrato"
+                options={OPCIONES_PROYECTOS}
+                onChange={(value) => setSelectedProyectos(value)}
+              />
             </div>
 
             <DialogFooter className="flex justify-between">
