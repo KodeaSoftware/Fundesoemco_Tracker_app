@@ -6,7 +6,7 @@
 function PageLayout({ children, addStyle }) {
   return (
     <div
-      className={`bg-gray-50 w-full min-h-screen overflow-hidden ${addStyle}`}
+      className={`bg-gray-50 w-full min-h-screen overflow-hidden  ${addStyle}`}
     >
       {children}
     </div>
