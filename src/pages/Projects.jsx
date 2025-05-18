@@ -23,15 +23,18 @@ function Projects() {
     <PageLayout>
       <Header pageTitle="Lista de proyectos" />
       <motion.div {...pageAnimationsParams}>
-        <div className="flex flex-row  mb-10 mt-20 pl-9 pr-9 gap-3 items-center justify-between w-full ">
-          <div className="flex gap-4">
-            <Input className="w-100 bg-white " placeholder="Buscar proyecto" />
+        <div className="flex sm:flex-row  mb-10 sm:mt-20 pl-9 pr-9 justify-center gap-3 items-center sm:justify-between sm:w-full w-[100%]   ">
+          <div className="flex gap-4 sm:flex-row flex-col w-full  ">
+            <Input
+              className="sm:w-[50%]  bg-white "
+              placeholder="Buscar proyecto"
+            />
             <CreateProject />
+            <Button className="bg-white  border hover:bg-gray-200 cursor-pointer text-black sm:w-auto">
+              Proyectos archivados
+              <TbArchive />
+            </Button>
           </div>
-          <Button className="bg-white  border hover:bg-gray-200 cursor-pointer text-black">
-            Proyectos archivados
-            <TbArchive />
-          </Button>
         </div>
 
         <div className="pt-0 px-9 py-20 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 pb-10W">

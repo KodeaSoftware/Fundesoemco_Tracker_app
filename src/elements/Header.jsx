@@ -10,7 +10,6 @@ import {
 } from "@/components/ui/navigation-menu";
 import { Link } from "react-router-dom";
 import { FiUsers } from "react-icons/fi";
-import { FiUserPlus } from "react-icons/fi";
 import { LuUserCog } from "react-icons/lu";
 import { RxDashboard } from "react-icons/rx";
 import { GoProjectRoadmap } from "react-icons/go";
@@ -21,8 +20,14 @@ import ResponsiveMenu from "./ResponsiveMenu";
 // motion animaciones
 // eslint-disable-next-line no-unused-vars
 import { motion, AnimatePresence } from "motion/react";
+import UserAccount from "./UserAccount";
 
 function Header(props) {
+  const userData = {
+    name: "Sebastian",
+    photo: "",
+  };
+
   const [displayMenu, setDisplayMenu] = useState(false);
   const closeMenu = () => setDisplayMenu(false);
 
@@ -60,7 +65,10 @@ function Header(props) {
               transition={{ duration: 0.1, ease: "easeOut" }}
               onClick={(e) => e.stopPropagation()}
             >
-              <ResponsiveMenu pageTitle={props.pageTitle} />
+              <ResponsiveMenu
+                pageTitle={props.pageTitle}
+                userName="Sebastian"
+              />
             </motion.div>
           </motion.div>
         )}
@@ -149,12 +157,7 @@ function Header(props) {
           </NavigationMenuList>
         </NavigationMenu>
         <div className="ml-auto flex items-center gap-4">
-          <Link
-            to="/login"
-            className="text-sm text-gray-500 hover:text-gray-700"
-          >
-            Cerrar sesión
-          </Link>
+          <UserAccount userName="Sebastian" />
         </div>
       </header>
     </>

@@ -4,17 +4,13 @@ import { FiUserPlus } from "react-icons/fi";
 import { LuUserCog } from "react-icons/lu";
 import { RxDashboard } from "react-icons/rx";
 import { GoProjectRoadmap } from "react-icons/go";
+import UserAccount from "./UserAccount";
 
 function ResponsiveMenu(props) {
   return (
     <div className="bg-white w-[300px] h-[100vh] top-0 left-0 absolute shadow-lg p-6">
       <div className="flex flex-row items-center gap-2 h-15 w-full mb-5 border-b-1 p-2">
-        <img
-          src="fundesoemco-logo.png"
-          alt="fundesoemco-logo"
-          className="w-10 h-9"
-        />
-        <h2 className=" font-bold text-md ">{props.pageTitle}</h2>
+        <UserAccount userName={props.userName} />
       </div>
       <nav className="flex flex-col space-y-4">
         <Link

@@ -97,13 +97,13 @@ const employees = [
 
 function Employees() {
   return (
-    <PageLayout addStyle="flex justify-center pt-22  ">
+    <PageLayout addStyle="flex justify-center sm:pt-22 flex-col items-center   ">
       <Header pageTitle="Lista de empleados" />
-      <div className="bg-white w-[95%] p-10  border-1 rounded-lg shadow-sm ">
+      <div className="bg-white sm:w-[95%] w-[85%]  p-10  border-1 rounded-lg shadow-sm ">
         <motion.div {...pageAnimationsParams}>
-          <div className="flex flex-wrap gap-5">
+          <div className="flex sm:flex-row sm:gap-5 flex-col gap-5 mb-5 sm:mb-0">
             <Input
-              className="w-100 mb-10 bg-gray-50 "
+              className=" sm:w-100 w-full sm:mb-10 bg-gray-50 "
               placeholder="Buscar empleado"
             />
             <CreateEmployee />
