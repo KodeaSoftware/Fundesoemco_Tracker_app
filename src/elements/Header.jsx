@@ -14,6 +14,7 @@ import { LuUserCog } from "react-icons/lu";
 import { RxDashboard } from "react-icons/rx";
 import { GoProjectRoadmap } from "react-icons/go";
 import { IoMenuSharp } from "react-icons/io5";
+import { FaQrcode } from "react-icons/fa";
 import { useState } from "react";
 import ResponsiveMenu from "./ResponsiveMenu";
 
@@ -24,7 +25,7 @@ import UserAccount from "./UserAccount";
 
 function Header(props) {
   const userData = {
-    name: "Sebastian",
+    email: "sebaszapata2022@gmail.com",
     photo: "",
   };
 
@@ -34,17 +35,41 @@ function Header(props) {
   const handleResponsiveMenu = () => {
     setDisplayMenu(true);
   };
+
+  const getIconForPageTitle = (title) => {
+    switch (title) {
+      case "Dashboard":
+        return <RxDashboard className="text-black-100" />;
+      case "Lista de proyectos":
+        return <GoProjectRoadmap className="text-black-100" />;
+      case "Lista de empleados":
+        return <FiUsers className="text-black-100" />;
+      case "Lista de coordinadores":
+        return <LuUserCog className="text-black-100" />;
+      case "Escaner":
+        return <FaQrcode className="text-black-100" />;
+      default:
+        return null;
+    }
+  };
+
   return (
     <>
-      <header className="w-full m-0 h-20 block pl-8 pr-8  sm:hidden p-4 flex items-center justify-between">
-        <button
-          className="w-[50px] h-[50px]  cursor-pointer bg-white flex items-center justify-center text-2xl border-1 rounded-md"
-          onClick={handleResponsiveMenu}
-        >
-          <IoMenuSharp />
-        </button>
-        <h1 className="text-md ml-4 rounded-sm  p-2 pl-4 pr-4 font-semibold border-1 bg-white ">
+      <header className="sticky top-0 bg-white z-10 border-b-1  w-full m-0 h-15 block pl-9 pr-11 sm:hidden right-0 flex items-center justify-between">
+        <h1 className="text-md font-semibold flex items-center gap-2">
+          <button
+            className="w-[40px] h-[40px]  cursor-pointer bg-white flex items-center justify-center text-2xl border-1 rounded-md"
+            onClick={handleResponsiveMenu}
+          >
+            <IoMenuSharp />
+          </button>
+          <img
+            src="/fundesoemco-logo.png"
+            alt="fundesoemco-logo"
+            className="w-10 absolute right-[40px]"
+          />
           {props.pageTitle}
+          {getIconForPageTitle(props.pageTitle)}
         </h1>
       </header>
       <AnimatePresence>
@@ -67,7 +92,7 @@ function Header(props) {
             >
               <ResponsiveMenu
                 pageTitle={props.pageTitle}
-                userName="Sebastian"
+                email={userData.email}
               />
             </motion.div>
           </motion.div>
@@ -75,18 +100,21 @@ function Header(props) {
       </AnimatePresence>
 
       <header
-        className="  hidden sm:block sm:h-15 sm:flex sm:items-center sm:gap-5 sm:font-[Noto sans]  sm:px-4 sm:absolute top-0 z-10 
+        className=" sticky hidden sm:block sm:h-15 sm:flex sm:items-center sm:gap-5 sm:font-[Noto sans]  sm:px-4  top-0 z-10 
      left-0 right-0 
      bg-white w-full border
    
      "
       >
         <img
-          src="fundesoemco-logo.png"
+          src="/fundesoemco-logo.png"
           alt="fundesoemco-logo"
           className="w-10"
         />
-        <h2 className="font-semibold w-[150px] ">{props.pageTitle}</h2>
+        <h2 className="font-semibold w-[250px] flex items-center gap-2">
+          {props.pageTitle}
+          {getIconForPageTitle(props.pageTitle)}
+        </h2>
         <NavigationMenu>
           <NavigationMenuList>
             <NavigationMenuItem>
@@ -156,8 +184,28 @@ function Header(props) {
             </NavigationMenuItem>
           </NavigationMenuList>
         </NavigationMenu>
+        <NavigationMenu>
+          <NavigationMenuList>
+            <NavigationMenuItem>
+              <NavigationMenuTrigger>Herramientas</NavigationMenuTrigger>
+              <NavigationMenuContent>
+                <div className="w-[200px] flex flex-col gap-3 font-[Noto sans]">
+                  <NavigationMenuLink>
+                    <Link
+                      to="/escaner"
+                      className="flex flex-wrap gap-2 font-semibold justify-between"
+                    >
+                      Escáner QR
+                      <FaQrcode className="text-black-100" />
+                    </Link>
+                  </NavigationMenuLink>
+                </div>
+              </NavigationMenuContent>
+            </NavigationMenuItem>
+          </NavigationMenuList>
+        </NavigationMenu>
         <div className="ml-auto flex items-center gap-4">
-          <UserAccount userName="Sebastian" />
+          <UserAccount email={userData.email} />
         </div>
       </header>
     </>

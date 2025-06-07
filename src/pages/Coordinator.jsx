@@ -98,34 +98,24 @@ const coordinadores = [
 ];
 
 function Coordinator() {
-  const [searchTerm, setSearchTerm] = useState("");
-
-  const filteredCoordinadores = coordinadores.filter((coordinador) => {
-    const term = searchTerm.toLowerCase();
-    return (
-      coordinador.name.toLowerCase().includes(term) ||
-      coordinador.id.toString().includes(term)
-    );
-  });
-
   return (
-    <PageLayout addStyle="flex justify-center pt-22">
+    <>
       <Header pageTitle="Lista de coordinadores" />
-      <div className="bg-white w-[95%] p-10 border-1 rounded-lg shadow-sm overflow-scroll ">
-        <motion.div {...pageAnimationsParams}>
-          <div className="flex flex-wrap gap-5">
-            <Input
-              className="w-100 mb-10 bg-gray-50"
-              placeholder="Buscar por nombre o ID"
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-            />
-            <CreateCoordinator />
-          </div>
-          <InfoCoordinador data={filteredCoordinadores} />
-        </motion.div>
-      </div>
-    </PageLayout>
+      <PageLayout addStyle="flex  sm:pt-0 flex-col items-center pt-7 ">
+        <div className="bg-white h-[100%]s w-[95%] p-7 border-1 rounded-lg shadow-sm  ">
+          <motion.div {...pageAnimationsParams}>
+            <div className="flex sm:flex-row sm:gap-5 flex-col gap-5 mb-5 sm:mb-0">
+              <Input
+                className="w-full sm:mb-10 mb-1 bg-gray-50"
+                placeholder="Buscar por nombre o ID"
+              />
+              <CreateCoordinator />
+            </div>
+            <InfoCoordinador data={coordinadores} />
+          </motion.div>
+        </div>
+      </PageLayout>
+    </>
   );
 }
 

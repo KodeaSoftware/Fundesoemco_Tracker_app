@@ -15,6 +15,20 @@ import { IoBusinessOutline } from "react-icons/io5";
 import { FiUserPlus } from "react-icons/fi";
 import SelectComponent from "./SelectComponent";
 import { useState } from "react";
+import QRCode from 'qrcode';
+import {
+  getEmployees,
+  getEmployeeByCedula,
+  getEmployeeById,
+  createEmployee,
+  updateEmployee,
+  deleteEmployee,
+
+} from "../utils/employees.js"
+
+
+
+
 
 function CreateEmployee() {
   const [selectedContrato, setSelectedContrato] = useState("");
@@ -29,6 +43,43 @@ function CreateEmployee() {
     { value: "cvc", label: "CVC" },
     { value: "Fundesoemco", label: "Fundesoemco" },
   ];
+
+  async function handleCreateEmployee(event){
+    event.preventDefault();
+
+    // Validar si la cédula ya existe
+    const cedula = event.target.cedula.value;
+    const existente = await getEmployeeByCedula(cedula);
+    if (existente) {
+      alert("Ya existe un empleado con esa cédula.");
+      return;
+    }
+
+    const newEmployee = {
+      cedula: event.target.cedula.value,
+      nombre: event.target.nombre.value,
+      departamento: event.target.departamento.value,
+      telefono: event.target.telefono.value,
+      cargo: event.target.cargo.value,
+      contrato: event.target.contrato.value,
+      proyecto: event.target.proyecto.value,
+    }
+
+    const creado = await createEmployee(newEmployee);
+    console.log('Empleado creado:', creado);
+
+    const url = await QRCode.toDataURL(cedula);
+    // Crear y descargar el QR
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `QR_${event.target.nombre.value}_${cedula}.png`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  }
+
+
+  
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -38,7 +89,7 @@ function CreateEmployee() {
         </Button>
       </DialogTrigger>
 
-      <DialogContent className="sm:max-w-[700px] flex flex-col items-center  ">
+      <DialogContent className="sm:max-w-[700px]  flex flex-col items-center  ">
         <DialogHeader className="w-full pl-4    ">
           <DialogTitle className="text-xl font-bold mt-2 flex items-center gap-2">
             Nuevo Empleado <FiUserPlus className="text-back-100" />
@@ -47,7 +98,7 @@ function CreateEmployee() {
             Completa la información para crear un nuevo empleado.
           </DialogDescription>
         </DialogHeader>
-        <form className="flex flex-col h-full">
+        <form className="flex flex-col h-full" onSubmit={handleCreateEmployee}>
           {/* Inputs agrupados */}
           <div className="flex flex-wrap gap-4">
             <div className="w-[300px] flex flex-col gap-2">
@@ -57,7 +108,7 @@ function CreateEmployee() {
               >
                 Nombre y Apellido
               </label>
-              <Input id="employee-fullname" placeholder="Ej: Juan Pérez" />
+              <Input id="nombre" placeholder="Ej: Juan Pérez" name="nombre" />
 
               <label
                 htmlFor="employee-id"
@@ -65,7 +116,7 @@ function CreateEmployee() {
               >
                 ID / Cédula
               </label>
-              <Input id="employee-id" placeholder="Ej: 1234567890" />
+              <Input id="cedula" placeholder="Ej: 1234567890" name="cedula" />
 
               <label
                 htmlFor="employee-phone"
@@ -73,7 +124,7 @@ function CreateEmployee() {
               >
                 Teléfono
               </label>
-              <Input id="employee-phone" placeholder="Ej: 3001234567" />
+              <Input id="telefono" placeholder="Ej: 3001234567" name="telefono" />
             </div>
 
             <div className="w-[300px] flex flex-col gap-2">
@@ -84,8 +135,9 @@ function CreateEmployee() {
                 Departamento
               </label>
               <Input
-                id="employee-department"
+                id="departamento"
                 placeholder="Ej: Recursos Humanos"
+                name="departamento"
               />
 
               <label
@@ -94,10 +146,10 @@ function CreateEmployee() {
               >
                 Cargo
               </label>
-              <Input id="employee-role" placeholder="Ej: Analista" />
+              <Input id="cargo" placeholder="Ej: Analista" name="cargo" />
 
               <label
-                htmlFor="employee-role"
+                htmlFor="employee-contrato"
                 className="text-sm font-medium text-gray-700"
               >
                 Contrato
@@ -107,6 +159,7 @@ function CreateEmployee() {
                 options={OPCIONES_CONTRATO}
                 onChange={(value) => setSelectedContrato(value)}
               />
+              <input type="hidden" name="contrato" value={selectedContrato} />
             </div>
           </div>
 
@@ -120,16 +173,18 @@ function CreateEmployee() {
                 Proyectos Asignados
               </label>
               <SelectComponent
-                label="Tipo de contrato"
+                label="Proyecto"
                 options={OPCIONES_PROYECTOS}
                 onChange={(value) => setSelectedProyectos(value)}
               />
+              <input type="hidden" name="proyecto" value={selectedProyectos} />
             </div>
 
             <DialogFooter className="flex justify-between">
               <Button
                 type="submit"
                 className="bg-[#00BF40] hover:bg-[#00a636] cursor-pointer"
+               
               >
                 Guardar Empleado
               </Button>

@@ -8,6 +8,8 @@ import AusentesHoyCard from "../elements/AusentesHoyCard";
 import HorasPromedioCard from "../elements/HorasPromedioCard";
 import AsistenciaMensualCard from "../elements/AsistenciaMensualCard";
 import RegistroAsistencia from "../elements/RegistroAsistencia";
+import { AsistenciaMensualGrafico } from "../elements/AsistenciaMensualGrafico";
+import { AsistenciaInasistenciaGrafico } from "../elements/AsistenciaInasistenciaGrafico";
 
 // motion animaciones
 // eslint-disable-next-line no-unused-vars
@@ -16,21 +18,28 @@ import { pageAnimationsParams } from "../motion/pageAnimation";
 
 function Dashboard() {
   return (
-    <PageLayout>
+    <>
       <Header pageTitle="Dashboard" />
-      <motion.div {...pageAnimationsParams}>
-        <div className="px-9 sm:py-20 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 pb-10 ">
-          <PresentesHoyCard />
-          <AusentesHoyCard />
-          <HorasPromedioCard />
-          <AsistenciaMensualCard />
-        </div>
+      <PageLayout>
+        <motion.div {...pageAnimationsParams}>
+          <div className="px-9 top-0 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 gb-red-200 pt-7 sm:pt-0  mb-7 ">
+            <PresentesHoyCard />
+            <AusentesHoyCard />
+            <HorasPromedioCard />
+            <AsistenciaMensualCard />
+          </div>
 
-        <div className="w-full h-full flex items-center p-10 pt-0">
-          <RegistroAsistencia />
-        </div>
-      </motion.div>
-    </PageLayout>
+          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7 p-9 pt-0">
+            <AsistenciaMensualGrafico />
+            <AsistenciaInasistenciaGrafico />
+          </div>
+
+          <div className="w-full h-full flex items-center p-10 pt-0">
+            <RegistroAsistencia />
+          </div>
+        </motion.div>
+      </PageLayout>
+    </>
   );
 }
 

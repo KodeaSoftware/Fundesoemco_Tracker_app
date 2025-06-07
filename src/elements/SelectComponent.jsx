@@ -13,7 +13,7 @@ import {
 export default function SelectComponent({ label, options = [], onChange }) {
   return (
     <Select onValueChange={onChange}>
-      <SelectTrigger className="w-[280px] cursor-pointer">
+      <SelectTrigger className="w-full sm:w-[100%] cursor-pointer">
         <SelectValue placeholder="Selecciona una opción" />
       </SelectTrigger>
       <SelectContent>

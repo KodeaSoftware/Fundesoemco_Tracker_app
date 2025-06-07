@@ -1,12 +1,95 @@
-# React + Vite
+# Sistema de Gestión de Empleados
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Descripción
+Este es un sistema de gestión de empleados desarrollado con React y Vite, que permite administrar y visualizar información de empleados de manera eficiente.
 
-Currently, two official plugins are available:
+## Estructura del Proyecto
+```
+src/
+├── components/     # Componentes reutilizables de UI
+├── elements/       # Elementos específicos de la aplicación
+├── layout/         # Componentes de diseño y estructura
+├── lib/           # Utilidades y configuraciones
+├── motion/        # Configuraciones de animaciones
+├── pages/         # Páginas principales de la aplicación
+├── routes/        # Configuración de rutas
+└── utils/         # Funciones utilitarias
+```
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Características Principales
+- Gestión de empleados
+- Búsqueda y filtrado de empleados
+- Importación de datos mediante CSV
+- Interfaz moderna y responsiva
+- Animaciones suaves
 
-## Expanding the ESLint configuration
+## Tecnologías Utilizadas
+- React
+- Vite
+- Tailwind CSS
+- Motion (para animaciones)
+- Supabase (para backend)
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## Componentes Principales
+
+### Employees.jsx
+El componente principal para la gestión de empleados que incluye:
+- Búsqueda de empleados
+- Visualización en tabla
+- Importación de CSV
+- Creación de nuevos empleados
+
+### InfoEmployeTable
+Componente para mostrar la información de empleados en formato de tabla.
+
+### CreateEmployee
+Componente para la creación de nuevos empleados.
+
+### EmployeeCSV
+Componente para la importación de datos de empleados mediante archivos CSV.
+
+## Configuración del Proyecto
+
+### Requisitos Previos
+- Node.js (versión recomendada: 16.x o superior)
+- npm o yarn
+
+### Instalación
+1. Clonar el repositorio
+```bash
+git clone [URL_DEL_REPOSITORIO]
+```
+
+2. Instalar dependencias
+```bash
+npm install
+```
+
+3. Iniciar el servidor de desarrollo
+```bash
+npm run dev
+```
+
+## Estructura de Datos
+
+### Empleado
+```typescript
+interface Empleado {
+  nombre: string;
+  cedula: string;
+  // Otros campos según la implementación
+}
+```
+
+## Contribución
+1. Fork el proyecto
+2. Crear una rama para tu feature (`git checkout -b feature/AmazingFeature`)
+3. Commit tus cambios (`git commit -m 'Add some AmazingFeature'`)
+4. Push a la rama (`git push origin feature/AmazingFeature`)
+5. Abrir un Pull Request
+
+## Licencia
+Este proyecto está bajo la Licencia MIT - ver el archivo [LICENCE.md](LICENCE.md) para más detalles.
+
+## Contacto
+[Información de contacto del mantenedor del proyecto]

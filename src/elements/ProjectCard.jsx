@@ -8,15 +8,31 @@ import {
 } from "@/components/ui/card";
 import { IoBusinessOutline } from "react-icons/io5";
 import { FaRegCalendarAlt } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 
 function ProjectCard(props) {
+  const navigate = useNavigate();
+
+  const handleClick = () => {
+    navigate(`/project/${props.title}`, {
+      state: {
+        projectName: props.title,
+        projectDesc: props.desc,
+        createdAt: props.createAt
+      }
+    });
+  };
+
   return (
-    <div className=" w-full hover:scale-102 transition-all duration-300 ease-in-out cursor-pointer ">
-      <Card className=" gap-2 ">
+    <div 
+      className="w-full hover:scale-102 transition-all duration-300 ease-in-out cursor-pointer"
+      onClick={handleClick}
+    >
+      <Card className="gap-2">
         <CardHeader>
-          <CardTitle className="flex items-center justify-between text-base font-semibold ">
+          <CardTitle className="flex items-center justify-between text-base font-semibold">
             {props.title}
-            <IoBusinessOutline className="text-emerald-700 " />
+            <IoBusinessOutline className="text-emerald-700" />
           </CardTitle>
         </CardHeader>
         <CardContent>

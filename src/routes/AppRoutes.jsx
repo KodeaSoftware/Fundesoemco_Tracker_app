@@ -8,6 +8,8 @@ import Dashboard from "../pages/Dashboard";
 import Projects from "../pages/Projects";
 import Employees from "../pages/Employees";
 import Coordinator from "../pages/Coordinator";
+import ProjectDetails from "../pages/ProjectDetails";
+import Escaner from "../pages/Escaner";
 
 // Animate presence para animaciónes entre paginas
 import { AnimatePresence } from "motion/react";
@@ -23,6 +25,8 @@ const AppRoutes = () => {
         <Route path="/project-list" element={<Projects />} />
         <Route path="/employee-list" element={<Employees />} />
         <Route path="/coordinator-list" element={<Coordinator />} />
+        <Route path="/project/:projectName" element={<ProjectDetails />} />
+        <Route path="/escaner" element={<Escaner />} />
       </Routes>
     </AnimatePresence>
   );

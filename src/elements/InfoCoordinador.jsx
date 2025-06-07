@@ -8,12 +8,16 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import CreateEmployee from "./CreateEmployee";
 import EditEmployee from "./EditEmployee";
+import { FaUser } from "react-icons/fa";
+
 
 export const InfoCoordinador = ({ data }) => {
   if (!data || data.length === 0) {
-    return <p>No hay data</p>;
+    return <div className="flex justify-center items-center h-full flex-col gap-2">
+      <p className="text-gray-500">No hay coordinador registrado</p>
+      <FaUser className="text-gray-500" size={20} />
+    </div>
   }
 
   return (
@@ -36,21 +40,23 @@ export const InfoCoordinador = ({ data }) => {
           {data.map((item) => (
             <TableRow key={item.id}>
               <TableCell className="font-semibold">{item.id}</TableCell>
-              <TableCell className="font-semibold">{item.name}</TableCell>
-              <TableCell>{item.department}</TableCell>
+              <TableCell className="font-semibold">{item.nombre}</TableCell>
+              <TableCell>{item.departamento}</TableCell>
               <TableCell className="font-semibold">{item.cargo}</TableCell>
-              <TableCell>{item.phone}</TableCell>
+              <TableCell>{item.telefono}</TableCell>
               <TableCell className="flex items-center gap-2">
-                {item.proyectos.join(", ")}
+                {item.proyecto}
               </TableCell>
 
               <TableCell className="text-center">
                 <EditEmployee
-                  name={item.name}
-                  id={item.id}
-                  department={item.department}
-                  rol={item.cargo}
-                  phone={item.phone}
+                  nombre={item.nombre}
+                  cedula={item.cedula}
+                  telefono={item.telefono}
+                  departamento={item.departamento}
+                  cargo={item.cargo}
+                  contrato={item.contrato}
+                  proyecto={item.proyecto}
                 />
               </TableCell>
             </TableRow>

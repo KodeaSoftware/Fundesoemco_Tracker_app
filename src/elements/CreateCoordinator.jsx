@@ -14,8 +14,10 @@ import { Textarea } from "@/components/ui/textarea";
 import { IoBusinessOutline } from "react-icons/io5";
 import { FiUserPlus } from "react-icons/fi";
 import SelectComponent from "./SelectComponent";
-
+import { createCoordinador } from "@/utils/coordinator";
 function CreateCoordinator() {
+
+  
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -25,19 +27,19 @@ function CreateCoordinator() {
         </Button>
       </DialogTrigger>
 
-      <DialogContent className="sm:max-w-[700px] flex flex-col items-center  ">
-        <DialogHeader className="w-full pl-4    ">
-          <DialogTitle className="text-xl font-bold mt-2 flex items-center gap-2">
+      <DialogContent className="sm:max-w-[700px] flex flex-col items-center p-4 sm:p-6">
+        <DialogHeader className="w-full pl-0 sm:pl-4">
+          <DialogTitle className="text-lg sm:text-xl font-bold mt-2 flex items-center gap-2">
             Nuevo Coordinador <FiUserPlus className="text-back-100" />
           </DialogTitle>
-          <DialogDescription>
-            Completa la información para crear un nuevo coordinador.
+          <DialogDescription className="text-start text-sm sm:text-base">
+            Al crear un nuevo coordinador, también se creará una cuenta para el coordinador, por favor completa correctamente la información.
           </DialogDescription>
         </DialogHeader>
-        <form className="flex flex-col h-full">
+        <form className="flex flex-col h-full w-full">
           {/* Inputs agrupados */}
-          <div className="flex flex-wrap gap-4">
-            <div className="w-[300px] flex flex-col gap-2">
+          <div className="flex flex-col sm:flex-row flex-wrap gap-4 w-full">
+            <div className="w-full sm:w-[300px] flex flex-col gap-2">
               <label
                 htmlFor="employee-fullname"
                 className="text-sm font-medium text-gray-700"
@@ -71,9 +73,16 @@ function CreateCoordinator() {
                 placeholder="Ej: 3001234567"
                 className="appearance-none [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none [&::-moz-appearance]:textfield"
               />
+                            <label
+                htmlFor="employee-projects"
+                className="text-sm font-medium text-gray-700 "
+              >
+                Proyectos Asignados
+              </label>
+              <SelectComponent />
             </div>
 
-            <div className="w-[300px] flex flex-col gap-2">
+            <div className="w-full sm:w-[300px] flex flex-col gap-2">
               <label
                 htmlFor="employee-department"
                 className="text-sm font-medium text-gray-700"
@@ -92,32 +101,50 @@ function CreateCoordinator() {
                 Cargo
               </label>
               <Input id="employee-role" placeholder="Ej: Analista" />
+
+              <label
+                htmlFor="employee-email"
+                className="text-sm font-medium text-gray-700"
+              >
+                Correo Electrónico
+              </label>
+              <Input 
+                id="employee-email" 
+                type="email"
+                placeholder="Ej: juan.perez@empresa.com" 
+              />
+
+              <label
+                htmlFor="employee-password"
+                className="text-sm font-medium text-gray-700"
+              >
+                Contraseña
+              </label>
+              <Input 
+                id="employee-password" 
+                type="password"
+                placeholder="Ingrese una contraseña segura" 
+              />
             </div>
           </div>
 
           {/* Selector y botones abajo */}
-          <div className="mt-6 flex flex-col gap-4">
-            <div>
-              <label
-                htmlFor="employee-projects"
-                className="text-sm font-medium text-gray-700 "
-              >
-                Proyectos Asignados
-              </label>
-              <SelectComponent />
+          <div className="mt-6 flex flex-col gap-4 w-full">
+            <div className="w-full">
+
             </div>
 
-            <DialogFooter className="flex justify-between">
+            <DialogFooter className="flex flex-col sm:flex-row justify-between gap-2 w-full">
               <Button
                 type="submit"
-                className="bg-[#00BF40] hover:bg-[#00a636] cursor-pointer"
+                className="w-full sm:w-auto bg-[#00BF40] hover:bg-[#00a636] cursor-pointer"
               >
                 Guardar Coordinador
               </Button>
               <DialogClose asChild>
                 <Button
                   type="button"
-                  className="bg-white border text-black hover:bg-gray-100 cursor-pointer"
+                  className="w-full sm:w-auto bg-white border text-black hover:bg-gray-100 cursor-pointer"
                 >
                   Cancelar
                 </Button>
