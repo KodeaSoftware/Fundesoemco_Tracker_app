@@ -19,6 +19,7 @@ src/
 ## Características Principales
 - Gestión de empleados
 - Búsqueda y filtrado de empleados
+- Búsqueda de emleados por código QR generado 
 - Importación de datos mediante CSV
 - Interfaz moderna y responsiva
 - Animaciones suaves
