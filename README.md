@@ -57,7 +57,7 @@ Componente para la importación de datos de empleados mediante archivos CSV.
 ### Instalación
 1. Clonar el repositorio
 ```bash
-git clone [URL_DEL_REPOSITORIO]
+git clone https://github.com/sb4ss/demo
 ```
 
 2. Instalar dependencias
@@ -68,17 +68,6 @@ npm install
 3. Iniciar el servidor de desarrollo
 ```bash
 npm run dev
-```
-
-## Estructura de Datos
-
-### Empleado
-```typescript
-interface Empleado {
-  nombre: string;
-  cedula: string;
-  // Otros campos según la implementación
-}
 ```
 
 ## Contribución
