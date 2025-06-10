@@ -39,5 +39,5 @@ Esta licencia permanece vigente mientras se utilice el software conforme a los t
 ## © 2025 **Kodea Software Tdl**
 
 <p> Sebastian Zapata Restrepo desarollador fullstack | SEO Kodea Software Tdl </p>
----
+
 Todos los derechos reservados.
