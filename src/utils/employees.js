@@ -1,11 +1,12 @@
 import { supabase } from "../../supabase-client";
 
-// 🔍 Get all employees
+// Get all employees
 export const getEmployees = async () => {
   const { data, error } = await supabase.from("employee").select();
   if (error) throw error;
   return [...data, data].sort((a, b) => a.cedula - b.cedula);
 };
+
 
 // 🔍 Get one employee by cedula
 export const getEmployeeByCedula = async (cedula) => {

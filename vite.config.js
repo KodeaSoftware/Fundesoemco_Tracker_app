@@ -11,9 +11,9 @@ export default defineConfig({
     VitePWA({
       registerType: "autoUpdate",
       manifest: {
-        name: "Mi PWA React",
-        short_name: "PWA React",
-        description: "Una Progressive Web App creada con React y Vite",
+        name: "Fundesoemco Tracker App",
+        short_name: "Fundesoemo Tracker",
+        description: "Fundesoemco Tracker App es una aplicación web/mobile diseñada para gestionar y registrar el ingreso de los trabajadores de la empresa Fundesoemco en obras o campo mediante escaneo de códigos",
         theme_color: "#ffffff",
         background_color: "#000000",
         display: "standalone",
