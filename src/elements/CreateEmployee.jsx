@@ -17,13 +17,7 @@ import SelectComponent from "./SelectComponent";
 import { useState } from "react";
 import QRCode from 'qrcode';
 import {
-  getEmployees,
-  getEmployeeByCedula,
-  getEmployeeById,
   createEmployee,
-  updateEmployee,
-  deleteEmployee,
-
 } from "../utils/employees.js"
 
 
@@ -46,7 +40,6 @@ function CreateEmployee() {
 
   async function handleCreateEmployee(event) {
     event.preventDefault();
-
     const newEmployee = {
       cedula: event.target.cedula.value,
       nombre: event.target.nombre.value,
@@ -54,14 +47,8 @@ function CreateEmployee() {
       telefono: event.target.telefono.value,
       cargo: event.target.cargo.value,
       contrato: event.target.contrato.value,
-      proyecto: event.target.proyecto.value,
+      proyecto: [event.target.proyecto.value],
     }
-    console.log(newEmployee)
-    // Validar si la cédula ya existe
-    const cedula = event.target.cedula.value;
-    const existente = await getEmployeeByCedula(cedula);
-
-
 
     const creado = await createEmployee(newEmployee);
     console.log('Empleado creado:', creado);
@@ -98,7 +85,6 @@ function CreateEmployee() {
           </DialogDescription>
         </DialogHeader>
         <form className="flex flex-col h-full" onSubmit={handleCreateEmployee}>
-          {/* Inputs agrupados */}
           <div className="flex flex-wrap gap-4">
             <div className="w-[300px] flex flex-col gap-2">
               <label

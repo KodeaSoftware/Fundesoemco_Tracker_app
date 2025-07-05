@@ -1,6 +1,3 @@
-import { supabase } from "../../supabase-client";
-
-// Get all employees
 
 export const getEmployees = async () => {
   try {
@@ -8,7 +5,6 @@ export const getEmployees = async () => {
     if (!response.ok) {
       throw new Error(`Error al obtener empleados: ${response.status} ${response.statusText}`);
     }
-
     const data = await response.json();
     console.log(data)
     return data.Data;
@@ -19,58 +15,78 @@ export const getEmployees = async () => {
 };
 
 
-
-
-// 🔍 Get one employee by cedula
-export const getEmployeeByCedula = async (cedula) => {
-  const { data, error } = await supabase
-    .from("employee")
-    .select("*")
-    .eq("cedula", cedula)
-    .single();
-  if (error) throw error;
-  return data;
-};
-
-// 🔍 Get one employee by id
-export const getEmployeeById = async (id) => {
-  const { data, error } = await supabase
-    .from("employee")
-    .select("*")
-    .eq("id", id)
-    .single();
-  if (error) throw error;
-  return data;
-};
-
 export const createEmployee = async (employee) => {
-  const { data, error } = await supabase
-    .from("employee")
-    .insert([employee]); // sin select
+  try {
+    const response = await fetch('https://fundesoemcotrackerbackend-production.up.railway.app/api/employee', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(employee),
+    });
 
+    if (!response.ok) {
+      throw new Error(`Error al crear empleado: ${response.status} ${response.statusText}`);
+    }
 
-  if (error) throw error;
-  console.log("insert result:", data); // <-- muy importante
-  return data;
+    const data = await response.json();
+    console.log('Empleado creado:', data);
+    window.location.reload()
+    return data;
+  } catch (error) {
+    console.error('Error en createEmployee:', error);
+    throw error;
+  }
 };
 
 
 
 
 // ✏️ Update employee by ID
-export const updateEmployee = async (id, updates) => {
-  const { data, error } = await supabase
-    .from("employee")
-    .update(updates)
-    .eq("id", id);
-  if (error) throw error;
-  return data;
+export const updateEmployee = async (updates) => {
+  try {
+    const response = await fetch(`https://fundesoemcotrackerbackend-production.up.railway.app/api/employee/`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(updates),
+    });
+
+    if (!response.ok) {
+      throw new Error(`Error al actualizar empleado: ${response.status} ${response.statusText}`);
+    }
+
+    const data = await response.json();
+    console.log('Empleado actualizado:', data);
+    window.location.reload()
+    return data;
+  } catch (error) {
+    console.error('Error en updateEmployee:', error);
+    throw error;
+  }
 };
 
 // 🗑️ Delete employee by ID
 export const deleteEmployee = async (id) => {
-  const { data, error } = await supabase.from("employee").delete().eq("id", id);
-  if (error) throw error;
-  window.location.reload();
-  return data;
+  try {
+    const response = await fetch(`https://fundesoemcotrackerbackend-production.up.railway.app/api/employee/${id}`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error(`Error al eliminar empleado: ${response.status} ${response.statusText}`);
+    }
+
+    const data = await response.json();
+    console.log('Empleado eliminado:', data);
+    window.location.reload()
+    return data;
+  } catch (error) {
+    console.error('Error en deleteEmployee:', error);
+    throw error;
+  }
 };

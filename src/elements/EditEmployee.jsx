@@ -61,17 +61,18 @@ function EditEmployee(props) {
     event.preventDefault();
     const employeeId = props.id;
     const updates = {
+      id: employeeId,
       cedula: event.target.cedula.value,
       nombre: event.target.fullname.value,
       departamento: event.target.departamento.value,
       telefono: event.target.telefono.value,
       cargo: event.target.cargo.value,
       contrato: selectedContrato,
-      proyecto: selectedProyectos,
+      proyecto: [selectedProyectos],
     };
 
     try {
-      const actualizado = await updateEmployee(employeeId, updates);
+      const actualizado = await updateEmployee(updates);
       console.log("Empleado actualizado:", actualizado);
       setOpen(false);
       window.location.reload();
