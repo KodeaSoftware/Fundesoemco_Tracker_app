@@ -1,4 +1,4 @@
-export const modalAnimationParams = {
+const modalAnimationParams = {
   initial: {
     opacity: 0,
     scale: 0.96,

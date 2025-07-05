@@ -44,16 +44,8 @@ function CreateEmployee() {
     { value: "Fundesoemco", label: "Fundesoemco" },
   ];
 
-  async function handleCreateEmployee(event){
+  async function handleCreateEmployee(event) {
     event.preventDefault();
-
-    // Validar si la cédula ya existe
-    const cedula = event.target.cedula.value;
-    const existente = await getEmployeeByCedula(cedula);
-    if (existente) {
-      alert("Ya existe un empleado con esa cédula.");
-      return;
-    }
 
     const newEmployee = {
       cedula: event.target.cedula.value,
@@ -64,9 +56,16 @@ function CreateEmployee() {
       contrato: event.target.contrato.value,
       proyecto: event.target.proyecto.value,
     }
+    console.log(newEmployee)
+    // Validar si la cédula ya existe
+    const cedula = event.target.cedula.value;
+    const existente = await getEmployeeByCedula(cedula);
+
+
 
     const creado = await createEmployee(newEmployee);
     console.log('Empleado creado:', creado);
+
 
     const url = await QRCode.toDataURL(cedula);
     // Crear y descargar el QR
@@ -79,7 +78,7 @@ function CreateEmployee() {
   }
 
 
-  
+
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -184,7 +183,7 @@ function CreateEmployee() {
               <Button
                 type="submit"
                 className="bg-[#00BF40] hover:bg-[#00a636] cursor-pointer"
-               
+
               >
                 Guardar Empleado
               </Button>

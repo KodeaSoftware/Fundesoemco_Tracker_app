@@ -1,11 +1,24 @@
 import { supabase } from "../../supabase-client";
 
 // Get all employees
+
 export const getEmployees = async () => {
-  const { data, error } = await supabase.from("employee").select();
-  if (error) throw error;
-  return [...data, data].sort((a, b) => a.cedula - b.cedula);
+  try {
+    const response = await fetch('https://fundesoemcotrackerbackend-production.up.railway.app/api/employee');
+    if (!response.ok) {
+      throw new Error(`Error al obtener empleados: ${response.status} ${response.statusText}`);
+    }
+
+    const data = await response.json();
+    console.log(data)
+    return data.Data;
+  } catch (error) {
+    console.error('Error en getEmployees:', error);
+    return null;
+  }
 };
+
+
 
 
 // 🔍 Get one employee by cedula
@@ -30,12 +43,19 @@ export const getEmployeeById = async (id) => {
   return data;
 };
 
-// ➕ Add new employee
 export const createEmployee = async (employee) => {
-  const { data, error } = await supabase.from("employee").insert([employee]);
+  const { data, error } = await supabase
+    .from("employee")
+    .insert([employee]); // sin select
+
+
   if (error) throw error;
+  console.log("insert result:", data); // <-- muy importante
   return data;
 };
+
+
+
 
 // ✏️ Update employee by ID
 export const updateEmployee = async (id, updates) => {

@@ -24,14 +24,13 @@ function Employees() {
   const [employeesList, setEmployeesList] = useState([]);
   const [filtered, setFiltered] = useState([]);
 
-  getEmployees().then((data) => {
-    if (!data || data.length === 0) {
-      console.log("Cargando empleados....");
-      console.log(data);
-    }
-    setEmployeesList(data);
-    setFiltered(data);
-  });
+  useEffect(() => {
+    const fetchEmployees = async () => {
+      const employees = await getEmployees();
+      setEmployeesList(employees);
+    };
+    fetchEmployees();
+  }, []);
 
   useEffect(() => {
     // Filtrar empleados cuando cambia el input
