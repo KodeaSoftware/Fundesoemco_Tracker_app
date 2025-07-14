@@ -71,6 +71,8 @@ function UserAccount({ email, photo }) {
                 className=" cursor-pointer w-full text-left text-sm text-red-600 hover:bg-red-50 px-3 py-2 rounded-md transition-colors"
                 onClick={() => {
                   localStorage.removeItem("token");
+                  localStorage.removeItem("correo");
+                  localStorage.removeItem("role");
                   window.location.href = "/login";
                 }}
               >
