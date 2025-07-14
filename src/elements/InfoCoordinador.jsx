@@ -2,7 +2,6 @@ import React from "react";
 import {
   Table,
   TableBody,
-  TableCaption,
   TableCell,
   TableHead,
   TableHeader,
@@ -29,7 +28,6 @@ export const InfoCoordinador = ({ data }) => {
             <TableHead>Nombre</TableHead>
             <TableHead>Departamento</TableHead>
             <TableHead>Cargo</TableHead>
-            <TableHead>Teléfono</TableHead>
             <TableHead>Proyectos</TableHead>
 
             <TableHead className="text-center">Acciones</TableHead>
@@ -39,11 +37,10 @@ export const InfoCoordinador = ({ data }) => {
         <TableBody>
           {data.map((item) => (
             <TableRow key={item.id}>
-              <TableCell className="font-semibold">{item.id}</TableCell>
+              <TableCell className="font-semibold">{item.cedula}</TableCell>
               <TableCell className="font-semibold">{item.nombre}</TableCell>
               <TableCell>{item.departamento}</TableCell>
               <TableCell className="font-semibold">{item.cargo}</TableCell>
-              <TableCell>{item.telefono}</TableCell>
               <TableCell className="flex items-center gap-2">
                 {item.proyecto}
               </TableCell>
