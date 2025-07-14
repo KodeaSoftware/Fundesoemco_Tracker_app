@@ -119,12 +119,11 @@ function EditEmployee(props) {
               >
                 ID / Cédula
               </label>
-              <Input id="cedula" defaultValue={props.cedula} name="cedula" />
+              <Input id="cedula" defaultValue={props.cedula} name="cedula" disabled className="cursor-not-allowed" />
 
               <label
                 htmlFor="employee-phone"
-                className="text-sm font-medium text-gray-700"
-              >
+                className="text-sm font-medium text-gray-700"              >
                 Teléfono
               </label>
               <Input
