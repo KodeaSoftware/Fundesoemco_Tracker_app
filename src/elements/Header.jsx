@@ -25,7 +25,7 @@ import UserAccount from "./UserAccount";
 
 function Header(props) {
   const userData = {
-    email: "sebaszapata2022@gmail.com",
+    email: localStorage.getItem("correo"),
     photo: "",
   };
 
