@@ -76,8 +76,8 @@ export const InfoEmployeTable = ({ data }) => {
               <TableCell className="max-w-[120px] truncate">
                 {item.contrato}
               </TableCell>
-              <TableCell className="max-w-[120px] truncate">
-                {item.proyecto}
+              <TableCell className="max-w-[120px] flex gap-2 truncate">
+                {item.proyecto.map(proyecto => <p> {proyecto} </p>)}
               </TableCell>
 
               <TableCell className="text-center">
