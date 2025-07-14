@@ -20,96 +20,19 @@ import PageLayout from "../layout/PageLayout";
 import { motion } from "motion/react";
 import { pageAnimationsParams } from "../motion/pageAnimation";
 import { Button } from "@/components/ui/button";
+import { getEmployees } from "../utils/employees";
 
 // Array de ejemplo de empleados
-const employees = [
-  {
-    cedula: 1032456789,
-    name: "Sebastian Zapata",
-    department: "IT",
-    phone: "123-456-7890",
-    cargo: "Developer",
-    contrato: "directo",
-  },
-  {
-    cedula: 1023456789,
-    name: "Maria Lopez",
-    department: "HR",
-    phone: "234-567-8901",
-    cargo: "HR Manager",
-    contrato: "directo",
-  },
-  {
-    cedula: 1012345678,
-    name: "Carlos Gomez",
-    department: "Finance",
-    phone: "345-678-9012",
-    cargo: "Accountant",
-    contrato: "contratista",
-  },
-  {
-    cedula: 1009876543,
-    name: "Ana Martinez",
-    department: "Marketing",
-    phone: "456-789-0123",
-    cargo: "Marketing Specialist",
-    contrato: "contratista",
-  },
-  {
-    cedula: 1098765432,
-    name: "Luis Torres",
-    department: "Sales",
-    phone: "567-890-1234",
-    cargo: "Sales Executive",
-    contrato: "directo",
-  },
-  {
-    cedula: 1087654321,
-    name: "Sofia Ramirez",
-    department: "IT",
-    phone: "678-901-2345",
-    cargo: "System Analyst",
-    contrato: "contratista",
-  },
-  {
-    cedula: 1076543210,
-    name: "Jorge Herrera",
-    department: "HR",
-    phone: "789-012-3456",
-    cargo: "Recruiter",
-    contrato: "directo",
-  },
-  {
-    cedula: 1065432109,
-    name: "Laura Sanchez",
-    department: "Finance",
-    phone: "890-123-4567",
-    cargo: "Financial Analyst",
-    contrato: "directo",
-  },
-  {
-    cedula: 1054321098,
-    name: "Diego Vargas",
-    department: "Marketing",
-    phone: "901-234-5678",
-    cargo: "Content Creator",
-    contrato: "contratista",
-  },
-  {
-    cedula: 1043210987,
-    name: "Camila Perez",
-    department: "Sales",
-    phone: "012-345-6789",
-    cargo: "Sales Manager",
-    contrato: "directo",
-  },
-];
+
 
 function Escaner() {
   const [scanResult, setScanResult] = useState(null);
   const [isScanning, setIsScanning] = useState(false);
   const [scanner, setScanner] = useState(null);
   const [empleadoEncontrado, setEmpleadoEncontrado] = useState(undefined);
+
+  const employees = getEmployees()
+  console.log(employees)
 
   useEffect(() => {
     return () => {
@@ -122,7 +45,7 @@ function Escaner() {
   useEffect(() => {
     if (scanResult) {
       // Buscar el empleado en el array
-      const empleado = employees.find(
+      const empleado = employees.map(
         (emp) => emp.cedula === parseInt(scanResult)
       );
       setEmpleadoEncontrado(empleado);
