@@ -13,89 +13,9 @@ import { pageAnimationsParams } from "../motion/pageAnimation";
 import { InfoEmployeTable } from "../elements/InfoEmployeTable";
 import { InfoCoordinador } from "../elements/InfoCoordinador";
 import CreateCoordinator from "../elements/CreateCoordinator";
+import { getCoordinadores } from "../utils/coordinator";
 
-const coordinadores = [
-  {
-    id: 1032456789,
-    name: "Sebastian Zapata",
-    department: "IT",
-    phone: "123-456-7890",
-    cargo: "Coordinador de IT",
-    proyectos: ["CVC"],
-  },
-  {
-    id: 1023456789,
-    name: "Maria Lopez",
-    department: "HR",
-    phone: "234-567-8901",
-    cargo: "Coordinadora de Recursos Humanos",
-    proyectos: ["Fundesoemco"],
-  },
-  {
-    id: 1012345678,
-    name: "Carlos Gomez",
-    department: "Finance",
-    phone: "345-678-9012",
-    cargo: "Coordinador Financiero",
-    proyectos: ["CVC", "Fundesoemco"],
-  },
-  {
-    id: 1009876543,
-    name: "Ana Martinez",
-    department: "Marketing",
-    phone: "456-789-0123",
-    cargo: "Coordinadora de Marketing",
-    proyectos: ["CVC"],
-  },
-  {
-    id: 1098765432,
-    name: "Luis Torres",
-    department: "Sales",
-    phone: "567-890-1234",
-    cargo: "Coordinador de Ventas",
-    proyectos: ["Fundesoemco"],
-  },
-  {
-    id: 1087654321,
-    name: "Sofia Ramirez",
-    department: "IT",
-    phone: "678-901-2345",
-    cargo: "Coordinadora de Sistemas",
-    proyectos: ["Fundesoemco", "CVC", "Compunet", "Nose"],
-  },
-  {
-    id: 1076543210,
-    name: "Jorge Herrera",
-    department: "HR",
-    phone: "789-012-3456",
-    cargo: "Coordinador de Selección",
-    proyectos: ["CVC"],
-  },
-  {
-    id: 1065432109,
-    name: "Laura Sanchez",
-    department: "Finance",
-    phone: "890-123-4567",
-    cargo: "Coordinadora de Análisis Financiero",
-    proyectos: ["Fundesoemco"],
-  },
-  {
-    id: 1054321098,
-    name: "Diego Vargas",
-    department: "Marketing",
-    phone: "901-234-5678",
-    cargo: "Coordinador de Contenidos",
-    proyectos: ["CVC"],
-  },
-  {
-    id: 1043210987,
-    name: "Camila Perez",
-    department: "Sales",
-    phone: "012-345-6789",
-    cargo: "Coordinadora de Ventas",
-    proyectos: ["Fundesoemco", "CVC"],
-  },
-];
+const coordinadores = await getCoordinadores()
 
 function Coordinator() {
   return (
