@@ -2,6 +2,7 @@
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
+import { useState } from "react";
 import {
   Select,
   SelectContent,
@@ -9,8 +10,25 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { login } from "../utils/auth";
 
 function LoginComponent() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [role, setRole] = useState("");
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const loginData = {
+      correo: email,
+      password: password,
+      role: role
+    }
+    const auth = await login(loginData)
+    localStorage.setItem("token", auth.token)
+    localStorage.setItem("role", auth.role)
+    localStorage.setItem("correo", auth.correo)
+  };
   return (
     <div className="w-100 h-140 border rounded-md flex flex-col justify-center items-center bg-white shadow-lg shadow-gray-200 font-[Noto sans]">
       <form
@@ -29,11 +47,20 @@ function LoginComponent() {
         <label htmlFor="email" className="font-medium text-start w-full mt-6">
           Email
         </label>
-        <Input placeholder="example@fundesoemco.com" />
+        <Input
+          placeholder="example@fundesoemco.com"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+        />
         <label htmlFor="password" className="font-medium start w-full ">
           Contraseña
         </label>
-        <Input placeholder="" />
+        <Input
+          placeholder=""
+          type="password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+        />
         <Link
           className="text-sm text-[#00BF40] absolute right-0 bottom-60"
           to="/forgot-password"
@@ -43,22 +70,19 @@ function LoginComponent() {
         <label htmlFor="password" className="font-medium start w-full ">
           Rol
         </label>
-        <Select>
+        <Select value={role} onValueChange={setRole}>
           <SelectTrigger className="w-full">
             <SelectValue placeholder="Selecione uno" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="light">RRHH</SelectItem>
-            <SelectItem value="dark">Coordinador</SelectItem>
+            <SelectItem value="rrhh">RRHH</SelectItem>
+            <SelectItem value="coordinador">Coordinador</SelectItem>
           </SelectContent>
         </Select>
         <Button
           type="submit"
           className="w-full mt-4 bg-[#00BF40] hover:bg-[#00a636] cursor-pointer "
-          onClick={(e) => {
-            e.preventDefault();
-            location.href = "/";
-          }}
+          onClick={handleSubmit}
         >
           Iniciar Sesión
         </Button>
