@@ -10,8 +10,7 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Textarea } from "@/components/ui/textarea";
-import { IoBusinessOutline } from "react-icons/io5";
+
 import { FiUserPlus } from "react-icons/fi";
 import SelectComponent from "./SelectComponent";
 import { useState } from "react";
@@ -19,8 +18,6 @@ import QRCode from 'qrcode';
 import {
   createEmployee,
 } from "../utils/employees.js"
-
-
 
 
 
@@ -63,8 +60,6 @@ function CreateEmployee() {
     link.click();
     document.body.removeChild(link);
   }
-
-
 
   return (
     <Dialog>
