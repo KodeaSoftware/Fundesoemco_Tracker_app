@@ -44,3 +44,28 @@ function Dashboard() {
 }
 
 export default Dashboard;
+
+
+<div className="hidden lg:flex flex-col gap-8">
+  {/* Primera fila: 2 imágenes */}
+  {movie.imagenes.length > 1 && (
+    <div className="grid grid-rows-2 gap-x-5 gap-y-3">
+      {movie.imagenes.slice(1, 3).map((img, index) => (
+        <div
+          key={index}
+          className={`relative cursor-pointer w-auto h-auto`}
+          onClick={() => movie.aficheId && openImageViewer(img.id)}
+        >
+          <Image
+            src={getImageUrl(img.id)}
+            alt={`Imagen ${index + 2} de ${movie.titulo}`}
+            fill={true}
+            quality={100}
+            className={`object-cover ${getPositionClass(img.objectPosition)}`}
+          />
+        </div>
+      ))}
+    </div>
+
+  ))}
+</div>
