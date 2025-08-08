@@ -13,7 +13,8 @@ export default defineConfig({
       manifest: {
         name: "Fundesoemco Tracker App",
         short_name: "Fundesoemo Tracker",
-        description: "Fundesoemco Tracker App es una aplicación web/mobile diseñada para gestionar y registrar el ingreso de los trabajadores de la empresa Fundesoemco en obras o campo mediante escaneo de códigos",
+        description:
+          "Fundesoemco Tracker App es una aplicación web/mobile diseñada para gestionar y registrar el ingreso de los trabajadores de la empresa Fundesoemco en obras o campo mediante escaneo de códigos",
         theme_color: "#ffffff",
         background_color: "#000000",
         display: "standalone",
@@ -53,5 +54,8 @@ export default defineConfig({
     alias: {
       "@": path.resolve(__dirname, "./src"),
     },
+  },
+  build: {
+    target: "esnext",
   },
 });
