@@ -1,1 +1,1 @@
-web: npm run build && caddy run --config Caddyfile --adapter caddyfile --watch --listen :$PORT
+web: npm install && npm run build && caddy run --config Caddyfile --adapter caddyfile --watch --listen :$PORT
