@@ -14,27 +14,22 @@ import EditEmployee from "./EditEmployee";
 import { FaUser } from "react-icons/fa";
 
 export const InfoEmployeTable = ({ data }) => {
-  if (data === undefined) {
+  if (!data) {
     return (
-      <div className="flex justify-center items-center h-full flex-row gap-2 relative">
-        <span>..</span>
-        <Skeleton className="w-full h-10 mb-2 " />
+      <div className="flex flex-col gap-2">
         <Skeleton className="w-full h-10 mb-2" />
-        <Skeleton className="w-ful h-10 mb-2" />
+        <Skeleton className="w-full h-10 mb-2" />
+        <Skeleton className="w-full h-10 mb-2" />
         <Skeleton className="w-full h-10 mb-2" />
         <Skeleton className="w-full h-10 mb-2" />
       </div>
     );
   }
-  if (!data || data.length === 0) {
+
+  if (data.length === 0) {
     return (
-      <div className="flex justify-center items-center h-full flex-row gap-2 relative">
-        <span>Cargando..</span>
-        <Skeleton className="w-full h-10 mb-2 " />
-        <Skeleton className="w-full h-10 mb-2" />
-        <Skeleton className="w-ful h-10 mb-2" />
-        <Skeleton className="w-full h-10 mb-2" />
-        <Skeleton className="w-full h-10 mb-2" />
+      <div className="flex justify-center items-center h-full">
+        <span className="text-gray-500 text-lg">No hay resultados</span>
       </div>
     );
   }
