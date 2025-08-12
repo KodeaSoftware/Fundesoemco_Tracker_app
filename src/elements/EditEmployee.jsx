@@ -65,11 +65,11 @@ function EditEmployee(props) {
       cedula: event.target.cedula.value,
       nombre: event.target.fullname.value,
       departamento: event.target.departamento.value,
-      telefono: event.target.telefono.value,
       cargo: event.target.cargo.value,
+      telefono: event.target.telefono.value,
       contrato: selectedContrato,
-      proyecto: [selectedProyectos],
     };
+
 
     try {
       const actualizado = await updateEmployee(updates);

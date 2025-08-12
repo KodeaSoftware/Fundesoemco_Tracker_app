@@ -74,10 +74,10 @@ export const InfoEmployeTable = ({ data }) => {
                 {item.telefono}
               </TableCell>
               <TableCell className="max-w-[120px] truncate">
-                {item.contrato}
+                {item.tipoContrato}
               </TableCell>
-              <TableCell className="max-w-[120px] flex gap-2 truncate">
-                {item.proyecto.map(proyecto => <p> {proyecto} </p>)}
+              <TableCell className="max-w-[120px] flex gap-2 flex-col ">
+                {item.proyecto.map(proyecto => <p className="bg-blue-200 w-max p-1 pl-3 pr-3 rounded-full " > {proyecto.nombre} </p>)}
               </TableCell>
 
               <TableCell className="text-center">
@@ -88,7 +88,7 @@ export const InfoEmployeTable = ({ data }) => {
                   departamento={item.departamento}
                   cargo={item.cargo}
                   contrato={item.contrato}
-                  proyecto={item.proyecto}
+                  proyecto={item.proyecto.map(proyecto => proyecto.id)}
                   id={item.id}
                 />
               </TableCell>
