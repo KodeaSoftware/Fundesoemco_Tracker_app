@@ -170,20 +170,6 @@ function EditEmployee(props) {
           </div>
 
           <div className="mt-6 flex flex-col gap-4">
-            <div>
-              <label
-                htmlFor="employee-projects"
-                className="text-sm font-medium text-gray-700"
-              >
-                Proyectos Asignados
-              </label>
-              <SelectComponent
-                label="Proyecto"
-                options={OPCIONES_PROYECTOS}
-                defaultValue={props.proyecto}
-                onChange={(value) => setSelectedProyectos(value)}
-              />
-            </div>
 
             <div className="">
               <p className="flex items-center gap-1 text-sm text-red-500 font-semibold mb-1">
