@@ -1,7 +1,7 @@
-
+import { API_URL } from "../config/config.env";
 export const getEmployees = async () => {
   try {
-    const response = await fetch('https://fundesoemcotrackerbackend-production.up.railway.app/api/employee');
+    const response = await fetch(`${API_URL}/api/employee`);
     if (!response.ok) {
       throw new Error(`Error al obtener empleados: ${response.status} ${response.statusText}`);
     }
@@ -17,7 +17,7 @@ export const getEmployees = async () => {
 
 export const createEmployee = async (employee) => {
   try {
-    const response = await fetch('https://fundesoemcotrackerbackend-production.up.railway.app/api/employee', {
+    const response = await fetch(`${API_URL}/api/employee`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -45,7 +45,7 @@ export const createEmployee = async (employee) => {
 // ✏️ Update employee by ID
 export const updateEmployee = async (updates) => {
   try {
-    const response = await fetch(`https://fundesoemcotrackerbackend-production.up.railway.app/api/employee/`, {
+    const response = await fetch(`${API_URL}/api/employee/`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
@@ -70,7 +70,7 @@ export const updateEmployee = async (updates) => {
 // 🗑️ Delete employee by ID
 export const deleteEmployee = async (id) => {
   try {
-    const response = await fetch(`https://fundesoemcotrackerbackend-production.up.railway.app/api/employee/${id}`, {
+    const response = await fetch(`${API_URL}/api/employee/${id}`, {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
