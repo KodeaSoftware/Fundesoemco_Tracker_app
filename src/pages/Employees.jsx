@@ -57,12 +57,21 @@ function Employees() {
                 onChange={(e) => setSearch(e.target.value)}
               />
               <CreateEmployee />
-              <EmployeeCSV
+
+
+              {/*
+
+              PENDIENTE IMPLEMENTAR ESTO DESPUES DEL MVP
+              
+                <EmployeeCSV
                 onUpload={(data) => {
                   setEmployeesList(data);
                   setFiltered(data);
                 }}
+
+
               />
+              */}
             </div>
 
             {/* Componente que renderiza empleados */}
