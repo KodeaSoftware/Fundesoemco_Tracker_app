@@ -1,8 +1,8 @@
-
+import { API_URL } from "../config/config.env";
 // get coordinadores
 export const getCoordinadores = async () => {
   try {
-    const response = await fetch('https://fundesoemcotrackerbackend-production.up.railway.app/api/coordinator');
+    const response = await fetch(`${API_URL}/api/coordinator`);
     if (!response.ok) {
       throw new Error(`Error al obtener coordinadores: ${response.status} ${response.statusText}`);
     }
@@ -18,7 +18,7 @@ export const getCoordinadores = async () => {
 // Crear Coordinador
 export const createCoordinador = async (coordinador) => {
   try {
-    const response = await fetch('https://fundesoemcotrackerbackend-production.up.railway.app/api/coordinator', {
+    const response = await fetch(`${API_URL}/api/coordinator`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -43,7 +43,7 @@ export const createCoordinador = async (coordinador) => {
 // Actualizar Coordinador por ID 
 export const updateCoordinador = async (updates) => {
   try {
-    const response = await fetch(`https://fundesoemcotrackerbackend-production.up.railway.app/api/coordinator`, {
+    const response = await fetch(`${API_URL}/api/coordinator`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
@@ -68,7 +68,7 @@ export const updateCoordinador = async (updates) => {
 // 🗑️ Delete coordinador by ID
 export const deleteCoordinador = async (id) => {
   try {
-    const response = await fetch(`https://fundesoemcotrackerbackend-production.up.railway.app/api/coordinator`, {
+    const response = await fetch(`${API_URL}/api/coordinator`, {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
