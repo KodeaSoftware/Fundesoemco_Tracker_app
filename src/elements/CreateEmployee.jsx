@@ -13,27 +13,68 @@ import { Button } from "@/components/ui/button";
 
 import { FiUserPlus } from "react-icons/fi";
 import SelectComponent from "./SelectComponent";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import QRCode from 'qrcode';
 import {
   createEmployee,
 } from "../utils/employees.js"
+import { getProjects } from "../utils/projects.js";
+import { getContractTypes } from "../utils/contract.js";
 
 
 
 function CreateEmployee() {
   const [selectedContrato, setSelectedContrato] = useState("");
   const [selectedProyectos, setSelectedProyectos] = useState();
+  const [proyectos, setProyectos] = useState([]);
+  const [tiposContrato, setTiposContrato] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  const OPCIONES_CONTRATO = [
-    { value: "contratista", label: "Contratista" },
-    { value: "directo", label: "Directo" },
-  ];
+  // Cargar proyectos y tipos de contrato desde la API
+  useEffect(() => {
+    const cargarDatos = async () => {
+      try {
+        setLoading(true);
 
-  const OPCIONES_PROYECTOS = [
-    { value: "cvc", label: "CVC" },
-    { value: "Fundesoemco", label: "Fundesoemco" },
-  ];
+        // Cargar proyectos
+        const proyectosData = await getProjects();
+        if (proyectosData) {
+          // Transformar los datos al formato que espera SelectComponent
+          const opcionesProyectos = proyectosData.map(proyecto => ({
+            value: proyecto.id,
+            label: proyecto.titulo
+          }));
+          setProyectos(opcionesProyectos);
+        }
+
+        // Cargar tipos de contrato
+        const tiposContratoData = await getContractTypes();
+        if (tiposContratoData) {
+          // Transformar los datos al formato que espera SelectComponent
+          const opcionesContrato = tiposContratoData.map(tipo => ({
+            value: tipo.id,
+            label: tipo.contract_type
+          }));
+          setTiposContrato(opcionesContrato);
+        }
+      } catch (error) {
+        console.error('Error al cargar datos:', error);
+        // Fallback a opciones por defecto en caso de error
+        setProyectos([
+          { value: "cvc", label: "CVC" },
+          { value: "Fundesoemco", label: "Fundesoemco" },
+        ]);
+        setTiposContrato([
+          { value: "contratista", label: "Contratista" },
+          { value: "directo", label: "Directo" },
+        ]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    cargarDatos();
+  }, []);
 
   async function handleCreateEmployee(event) {
     event.preventDefault();
@@ -136,7 +177,7 @@ function CreateEmployee() {
               </label>
               <SelectComponent
                 label="Tipo de contrato"
-                options={OPCIONES_CONTRATO}
+                options={tiposContrato}
                 onChange={(value) => setSelectedContrato(value)}
               />
               <input type="hidden" name="contrato" value={selectedContrato} />
@@ -154,7 +195,7 @@ function CreateEmployee() {
               </label>
               <SelectComponent
                 label="Proyecto"
-                options={OPCIONES_PROYECTOS}
+                options={proyectos}
                 onChange={(value) => setSelectedProyectos(value)}
               />
               <input type="hidden" name="proyecto" value={selectedProyectos} />
