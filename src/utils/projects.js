@@ -1,7 +1,7 @@
-
+import { API_URL } from "../config/config.env";
 export const getProjects = async () => {
     try {
-        const response = await fetch('https://fundesoemcotrackerbackend-production.up.railway.app/api/project');
+        const response = await fetch(`${API_URL}/api/project`);
         if (!response.ok) {
             throw new Error(`Error al obtener proyectos: ${response.status} ${response.statusText}`);
         }
