@@ -6,9 +6,32 @@ export const getProjects = async () => {
             throw new Error(`Error al obtener proyectos: ${response.status} ${response.statusText}`);
         }
         const data = await response.json();
+        console.log(data)
         return data;
     } catch (error) {
         console.error('Error en getProyects:', error);
         return null;
+    }
+};
+
+export const createProject = async (project) => {
+    try {
+        const response = await fetch(`${API_URL}/api/project`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(project),
+        });
+
+        if (!response.ok) {
+            throw new Error(`Error al crear el project: ${response.status} ${response.statusText}`);
+        }
+
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        console.error('Error en createProject:', error);
+        throw error;
     }
 };
