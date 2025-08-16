@@ -24,7 +24,7 @@ function ProjectCard(props) {
   };
 
   return (
-    <div 
+    <div
       className="w-full hover:scale-102 transition-all duration-300 ease-in-out cursor-pointer"
       onClick={handleClick}
     >
@@ -36,11 +36,11 @@ function ProjectCard(props) {
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <CardDescription>{props.desc}</CardDescription>
+          <CardDescription className=" text-wrap break-words" >{props.desc}</CardDescription>
         </CardContent>
         <CardFooter className="pt-4">
           <CardDescription className="text-sm text-gray-500 flex items-center gap-2 w-full">
-            Creado en {props.createAt}
+            Creado el {props.createAt}
             <FaRegCalendarAlt className="text-gray-500" />
           </CardDescription>
         </CardFooter>
