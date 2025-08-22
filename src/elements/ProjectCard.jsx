@@ -12,20 +12,20 @@ import { useNavigate } from "react-router-dom";
 
 function ProjectCard(props) {
   const navigate = useNavigate();
-
   const handleClick = () => {
     navigate(`/project/${props.title}`, {
       state: {
         projectName: props.title,
         projectDesc: props.desc,
-        createdAt: props.createAt
+        createdAt: props.createAt,
+        id: props.id
       }
     });
   };
 
   return (
     <div
-      className="w-full hover:scale-102 transition-all duration-300 ease-in-out cursor-pointer"
+      className="w-full hover:scale-102 transition-all duration-300 ease-in-out cursor-pointer h-auto"
       onClick={handleClick}
     >
       <Card className="gap-2">
@@ -36,7 +36,7 @@ function ProjectCard(props) {
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <CardDescription className=" text-wrap break-words" >{props.desc}</CardDescription>
+          <CardDescription className="text-wrap break-words max-h-5 truncate overflow-hidden" >{props.desc}</CardDescription>
         </CardContent>
         <CardFooter className="pt-4">
           <CardDescription className="text-sm text-gray-500 flex items-center gap-2 w-full">
