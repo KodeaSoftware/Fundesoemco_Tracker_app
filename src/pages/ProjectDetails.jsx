@@ -26,7 +26,7 @@ import { LuUserCog, LuUsers, LuBuilding2 } from "react-icons/lu";
 
 const ProjectDetails = () => {
   const location = useLocation();
-  const { projectName, projectDesc, createdAt } = location.state || {};
+  const { projectName, projectDesc, createdAt, id } = location.state || {};
   const [backgroundImage, setBackgroundImage] = useState("/project.webp");
 
   const handleImageChange = (event) => {
@@ -96,16 +96,14 @@ const ProjectDetails = () => {
                 <CardTitle>Descripción del Proyecto</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-muted-foreground">{projectDesc}</p>
+                <p className="text-muted-foreground h-full max-w-full break-words">{projectDesc}</p>
                 <p className="text-sm text-muted-foreground mt-4">
-                  Creado el: {new Date(createdAt).toLocaleDateString()}
+                  Creado el: {createdAt}
                 </p>
               </CardContent>
             </Card>
 
-            {/* Equipo del proyecto */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              {/* Coordinadores */}
               <Card>
                 <CardHeader className="flex flex-row justify-between items-center pl-7 pr-8">
                   <CardTitle>Coordinadores</CardTitle>
