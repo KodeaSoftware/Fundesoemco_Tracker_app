@@ -74,7 +74,7 @@ function Projects() {
             <div className="flex gap-4 sm:flex-row flex-col w-full  ">
               <Input
                 className="sm:w-[50%]  bg-white "
-                placeholder="Buscar proyecto"
+                placeholder="Buscar proyecto por titulo, mes, descripción"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
               />
@@ -92,7 +92,7 @@ function Projects() {
             ) : filteredProjects.length > 0 ? (
               filteredProjects.map((project) => (
                 <ProjectCard
-                  key={project.id}
+                  id={project.id}
                   title={project.titulo}
                   desc={project.descripcion}
                   createAt={formatDate(project.creadoEn)}
