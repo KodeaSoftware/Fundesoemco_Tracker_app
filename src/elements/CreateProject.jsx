@@ -98,7 +98,7 @@ function CreateProject() {
         </Button>
       </DialogTrigger>
 
-      <DialogContent className=" max-w-[600px] sm:max-w-[600px] max-h-[90vh] overflow-y-auto">
+      <DialogContent className="w-[400px] max-w-[400px] max-w-[600px] sm:max-w-[600px] max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="text-xl font-bold mt-2 flex items-center gap-2">
             Nuevo Proyecto <IoBusinessOutline />
@@ -108,7 +108,7 @@ function CreateProject() {
           </DialogDescription>
         </DialogHeader>
 
-        <form onSubmit={handleSubmit} className="relative space-y-4 w-full">
+        <form onSubmit={handleSubmit} className="relative space-y-4 w-full max-w-[350px]">
           <div>
             <label
               htmlFor="project-title"
@@ -140,7 +140,7 @@ function CreateProject() {
             <Textarea
               id="project-description"
               placeholder="Ingresa la descripción del proyecto"
-              className="mt-2 resize-none overflow-auto text-wrap break-words max-w-[550px]"
+              className="mt-2 resize-none max-w-[300px] max-h-[90px] overflow-auto text-wrap break-words max-w-[550px]"
               value={formData.descripcion}
               onChange={(e) => handleInputChange('descripcion', e.target.value)}
               maxLength={500}

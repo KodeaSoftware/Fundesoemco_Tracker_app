@@ -18,16 +18,20 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { FaCamera } from "react-icons/fa";
 import { motion } from "motion/react";
 import { pageAnimationsParams } from "../motion/pageAnimation";
 import { LuUserCog, LuUsers, LuBuilding2 } from "react-icons/lu";
+import { getEmployeeByIdProjecAndContract } from "../utils/projects"
 
 const ProjectDetails = () => {
   const location = useLocation();
   const { projectName, projectDesc, createdAt, id } = location.state || {};
   const [backgroundImage, setBackgroundImage] = useState("/project.webp");
+  const [employeeContratista, setEmployeeContratista] = useState([]);
+  const [employeeDirecto, setEmployeeDirecto] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   const handleImageChange = (event) => {
     const file = event.target.files[0];
@@ -36,6 +40,39 @@ const ProjectDetails = () => {
       setBackgroundImage(imageUrl);
     }
   };
+
+  useEffect(() => {
+    const fetchEmployees = async () => {
+      if (!id) return;
+
+      try {
+        setLoading(true);
+
+        const [contratistas, directos] = await Promise.all([
+          getEmployeeByIdProjecAndContract({
+            idProject: id,
+            tipoContrato: 1
+          }),
+          getEmployeeByIdProjecAndContract({
+            idProject: id,
+            tipoContrato: 2
+          })
+        ]);
+
+        setEmployeeContratista(contratistas || []);
+        setEmployeeDirecto(directos || []);
+      } catch (error) {
+        console.error('Error al obtener empleados:', error);
+        setEmployeeContratista([]);
+        setEmployeeDirecto([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchEmployees();
+  }, [id]);
+
 
   if (!location.state) {
     return (
@@ -90,7 +127,6 @@ const ProjectDetails = () => {
           </div>
 
           <div className="p-6 space-y-6">
-            {/* Información del proyecto */}
             <Card>
               <CardHeader>
                 <CardTitle>Descripción del Proyecto</CardTitle>
@@ -132,15 +168,23 @@ const ProjectDetails = () => {
                 <CardContent>
                   <Table>
                     <TableBody>
-                      <TableRow>
-                        <TableCell>Carlos Desarrollador</TableCell>
-                      </TableRow>
-                      <TableRow>
-                        <TableCell>Ana Diseñadora</TableCell>
-                      </TableRow>
-                      <TableRow>
-                        <TableCell>Pedro QA</TableCell>
-                      </TableRow>
+                      {loading ? (
+                        <TableRow>
+                          <TableCell className="text-muted-foreground">Cargando...</TableCell>
+                        </TableRow>
+                      ) : employeeDirecto && employeeDirecto.length > 0 ? (
+                        employeeDirecto.map((employee, index) => (
+                          <TableRow key={index}>
+                            <TableCell>
+                              {employee.nombre}
+                            </TableCell>
+                          </TableRow>
+                        ))
+                      ) : (
+                        <TableRow>
+                          <TableCell className="text-muted-foreground">No hay empleados directos asignados</TableCell>
+                        </TableRow>
+                      )}
                     </TableBody>
                   </Table>
                 </CardContent>
@@ -155,12 +199,23 @@ const ProjectDetails = () => {
                 <CardContent>
                   <Table>
                     <TableBody>
-                      <TableRow>
-                        <TableCell>Empresa A - Consultoría</TableCell>
-                      </TableRow>
-                      <TableRow>
-                        <TableCell>Empresa B - Desarrollo</TableCell>
-                      </TableRow>
+                      {loading ? (
+                        <TableRow>
+                          <TableCell className="text-muted-foreground">Cargando...</TableCell>
+                        </TableRow>
+                      ) : employeeContratista && employeeContratista.length > 0 ? (
+                        employeeContratista.map((employee, index) => (
+                          <TableRow key={index}>
+                            <TableCell>
+                              {employee.nombre}
+                            </TableCell>
+                          </TableRow>
+                        ))
+                      ) : (
+                        <TableRow>
+                          <TableCell className="text-muted-foreground">No hay contratistas asignados</TableCell>
+                        </TableRow>
+                      )}
                     </TableBody>
                   </Table>
                 </CardContent>

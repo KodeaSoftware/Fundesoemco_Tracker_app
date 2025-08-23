@@ -6,7 +6,6 @@ export const getProjects = async () => {
             throw new Error(`Error al obtener proyectos: ${response.status} ${response.statusText}`);
         }
         const data = await response.json();
-        console.log(data)
         return data;
     } catch (error) {
         console.error('Error en getProyects:', error);
@@ -25,11 +24,35 @@ export const createProject = async (project) => {
         });
 
         if (!response.ok) {
-            throw new Error(`Error al crear el project: ${response.status} ${response.statusText}`);
+            throw new Error(`Error al crear el proyecto: ${response.status} ${response.statusText}`);
+        }
+
+        const data = await response.json(); 7
+        window.location.reload()
+        return data;
+    } catch (error) {
+        console.error('Error en createProject:', error);
+        throw error;
+    }
+};
+
+export const getEmployeeByIdProjecAndContract = async (employeeInfo) => {
+    try {
+        const response = await fetch(`${API_URL}/api/employeeListProject`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(employeeInfo),
+        });
+
+        if (!response.ok) {
+            throw new Error(`Error al traer el proyecto con los empleados: ${response.status} ${response.statusText}`);
         }
 
         const data = await response.json();
-        return data;
+        console.log(data)
+        return data.DataEmployee;
     } catch (error) {
         console.error('Error en createProject:', error);
         throw error;
