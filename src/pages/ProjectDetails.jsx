@@ -28,7 +28,7 @@ import { getEmployeeByIdProjecAndContract } from "../utils/projects"
 const ProjectDetails = () => {
   const location = useLocation();
   const { projectName, projectDesc, createdAt, id } = location.state || {};
-  const [backgroundImage, setBackgroundImage] = useState("/project.webp");
+  const [backgroundImage, setBackgroundImage] = useState("/img-login.webp");
   const [employeeContratista, setEmployeeContratista] = useState([]);
   const [employeeDirecto, setEmployeeDirecto] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -102,6 +102,10 @@ const ProjectDetails = () => {
           >
             <Dialog>
               <DialogTrigger asChild>
+
+                {
+                  /*
+                
                 <Button
                   variant="ghost"
                   className="absolute bottom-4 right-4 bg-black/30 hover:bg-black/50 text-white"
@@ -109,6 +113,7 @@ const ProjectDetails = () => {
                   <FaCamera className="mr-2" />
                   Cambiar imagen
                 </Button>
+                */}
               </DialogTrigger>
               <DialogContent>
                 <DialogHeader>

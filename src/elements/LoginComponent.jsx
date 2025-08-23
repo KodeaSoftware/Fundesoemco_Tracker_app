@@ -30,10 +30,10 @@ function LoginComponent() {
     localStorage.setItem("correo", auth.correo)
   };
   return (
-    <div className="w-100 h-140 border rounded-md flex flex-col justify-center items-center bg-white shadow-lg shadow-gray-200 font-[Noto sans]">
+    <div className="absolute w-full left-0 top-0 bottom-0 h-full sm:relative  sm:w-100 sm:h-140  border rounded-md flex flex-col justify-center items-center bg-white shadow-lg shadow-gray-200 font-[Noto sans]">
       <form
         action=""
-        className="flex flex-col gap-4 flex relative  w-80 h-full justify-center items-center"
+        className="flex p-[30px] sm:p-0 flex-col gap-5 sm:gap-4 flex relative  w-80 h-full justify-center items-center w-full sm:w-auto"
       >
         <img
           src="fundesoemco-logo.png"
@@ -48,6 +48,7 @@ function LoginComponent() {
           Email
         </label>
         <Input
+          className="h-12 sm:h-auto text-[17px]"
           placeholder="example@fundesoemco.com"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
@@ -56,13 +57,14 @@ function LoginComponent() {
           Contraseña
         </label>
         <Input
+          className="h-12 sm:h-auto text-[17px]"
           placeholder=""
           type="password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
         <Link
-          className="text-sm text-[#00BF40] absolute right-0 bottom-60"
+          className=" text-[17px] sm:text-sm right-[10%] bottom-[60%] text-[#00BF40] sm:absolute sm:right-0 sm:bottom-60"
           to="/forgot-password"
         >
           ¿Olvidaste tu contraseña?
@@ -70,8 +72,9 @@ function LoginComponent() {
         <label htmlFor="password" className="font-medium start w-full ">
           Rol
         </label>
-        <Select value={role} onValueChange={setRole}>
-          <SelectTrigger className="w-full">
+        <Select value={role} onValueChange={setRole} >
+          <SelectTrigger className="h-12 sm:h-auto text-[17px] w-full
+         sm:text-[13px] ">
             <SelectValue placeholder="Selecione uno" />
           </SelectTrigger>
           <SelectContent>
