@@ -28,10 +28,35 @@ export const createProject = async (project) => {
         }
 
         const data = await response.json(); 7
-        window.location.reload()
+        //window.location.reload()
+        console.log(project)
         return data;
     } catch (error) {
         console.error('Error en createProject:', error);
+        throw error;
+    }
+};
+
+export const updateProject = async (project) => {
+    try {
+        const response = await fetch(`${API_URL}/api/project`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(project),
+        });
+
+        if (!response.ok) {
+            throw new Error(`Error al actualizar el proyecto: ${response.status} ${response.statusText}`);
+        }
+
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        console.error('Error en updateProject:', error);
+        console.log(project.jornada)
+
         throw error;
     }
 };

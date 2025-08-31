@@ -24,6 +24,7 @@ import { motion } from "motion/react";
 import { pageAnimationsParams } from "../motion/pageAnimation";
 import { LuUserCog, LuUsers, LuBuilding2 } from "react-icons/lu";
 import { getEmployeeByIdProjecAndContract } from "../utils/projects"
+import EditProject from "../elements/EditProject";
 
 const ProjectDetails = () => {
   const location = useLocation();
@@ -32,6 +33,7 @@ const ProjectDetails = () => {
   const [employeeContratista, setEmployeeContratista] = useState([]);
   const [employeeDirecto, setEmployeeDirecto] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [projectData, setProjectData] = useState(null);
 
   const handleImageChange = (event) => {
     const file = event.target.files[0];
@@ -72,6 +74,33 @@ const ProjectDetails = () => {
 
     fetchEmployees();
   }, [id]);
+
+  // Inicializar projectData cuando se reciben los datos del proyecto
+  useEffect(() => {
+    if (location.state) {
+      setProjectData({
+        id: id,
+        titulo: projectName,
+        descripcion: projectDesc,
+        creadoEn: createdAt,
+        jornada: null // Se puede agregar si está disponible en el estado
+      });
+    }
+  }, [location.state, id, projectName, projectDesc, createdAt]);
+
+  const handleProjectUpdated = (updatedProject) => {
+    // Actualizar el estado local con los nuevos datos del proyecto
+    setProjectData(updatedProject);
+
+    // Actualizar también el estado de location para reflejar los cambios
+    if (location.state) {
+      location.state.projectName = updatedProject.titulo;
+      location.state.projectDesc = updatedProject.descripcion;
+    }
+
+    // Opcional: Recargar la página para mostrar los cambios
+    window.location.reload();
+  };
 
 
   if (!location.state) {
@@ -133,8 +162,14 @@ const ProjectDetails = () => {
 
           <div className="p-6 space-y-6">
             <Card>
-              <CardHeader>
+              <CardHeader className="flex flex-row justify-between items-center">
                 <CardTitle>Descripción del Proyecto</CardTitle>
+                {projectData && (
+                  <EditProject
+                    project={projectData}
+                    onProjectUpdated={handleProjectUpdated}
+                  />
+                )}
               </CardHeader>
               <CardContent>
                 <p className="text-muted-foreground h-full max-w-full break-words">{projectDesc}</p>

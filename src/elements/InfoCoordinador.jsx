@@ -7,8 +7,8 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import EditEmployee from "./EditEmployee";
 import { FaUser } from "react-icons/fa";
+import EditCoordinator from "./EditCoordinator.jsx";
 
 
 export const InfoCoordinador = ({ data }) => {
@@ -18,6 +18,7 @@ export const InfoCoordinador = ({ data }) => {
       <FaUser className="text-gray-500" size={20} />
     </div>
   }
+
 
   return (
     <>
@@ -29,6 +30,7 @@ export const InfoCoordinador = ({ data }) => {
             <TableHead>Departamento</TableHead>
             <TableHead>Cargo</TableHead>
             <TableHead>Proyectos</TableHead>
+            <TableHead>Correo</TableHead>
 
             <TableHead className="text-center">Acciones</TableHead>
           </TableRow>
@@ -42,18 +44,20 @@ export const InfoCoordinador = ({ data }) => {
               <TableCell>{item.departamento}</TableCell>
               <TableCell className="font-semibold">{item.cargo}</TableCell>
               <TableCell className="flex items-center gap-2">
-                {item.proyecto}
+                {item.proyecto.map(project => project.nombre)}
               </TableCell>
+              <TableCell className="font-semibold">{item.correo}</TableCell>
 
               <TableCell className="text-center">
-                <EditEmployee
+                <EditCoordinator
+                  id={item.id}
                   nombre={item.nombre}
                   cedula={item.cedula}
-                  telefono={item.telefono}
                   departamento={item.departamento}
                   cargo={item.cargo}
-                  contrato={item.contrato}
                   proyecto={item.proyecto}
+                  correo={item.correo}
+                  password={item.password}
                 />
               </TableCell>
             </TableRow>

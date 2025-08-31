@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   Dialog,
   DialogContent,
@@ -14,24 +14,56 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { IoBusinessOutline } from "react-icons/io5";
 import { FiUserPlus } from "react-icons/fi";
+import { FiEye, FiEyeOff } from "react-icons/fi";
 import SelectComponent from "./SelectComponent";
 import { createCoordinador } from "../utils/coordinator";
+import { getProjects } from "../utils/projects";
+import { sendPassword } from "../utils/email";
 import QRCode from "qrcode";
 
 function CreateCoordinator() {
   const [selectedProyectos, setSelectedProyectos] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [proyectos, setProyectos] = useState([]);
+  const [loadingProyectos, setLoadingProyectos] = useState(true);
 
-  const OPCIONES_PROYECTOS = [
-    { value: "cvc", label: "CVC" },
-    { value: "Fundesoemco", label: "Fundesoemco" },
-  ];
+  // Cargar proyectos al montar el componente
+  useEffect(() => {
+    const cargarProyectos = async () => {
+      try {
+        setLoadingProyectos(true);
+        const proyectosData = await getProjects();
+        if (proyectosData) {
+          // Transformar los datos para el SelectComponent
+          const opcionesProyectos = proyectosData.map(proyecto => ({
+            value: proyecto.id,
+            label: proyecto.titulo
+          }));
+          setProyectos(opcionesProyectos);
+        }
+      } catch (error) {
+        console.error('Error al cargar proyectos:', error);
+        // Fallback a opciones por defecto si hay error
+        setProyectos([
+          { value: "cvc", label: "CVC" },
+          { value: "Fundesoemco", label: "Fundesoemco" },
+        ]);
+      } finally {
+        setLoadingProyectos(false);
+      }
+    };
+
+    cargarProyectos();
+  }, []);
 
   async function handleCreateCoordinator(event) {
     event.preventDefault();
     setIsLoading(true);
 
     try {
+
+
       const newCoordinator = {
         cedula: event.target.cedula.value,
         nombre: event.target.nombre.value,
@@ -44,6 +76,22 @@ function CreateCoordinator() {
 
       const creado = await createCoordinador(newCoordinator);
       console.log('Coordinador creado:', creado);
+
+      // Enviar correo con las credenciales
+      try {
+        const emailData = {
+          correo: event.target.email.value,
+          nombre: event.target.nombre.value,
+          password: event.target.password.value
+        };
+        console.log(emailData)
+        await sendPassword(emailData);
+        console.log('Correo enviado exitosamente');
+      } catch (emailError) {
+
+        console.error('Error al enviar el correo:', emailError);
+      }
+
 
       // Generar QR con la cédula
       const url = await QRCode.toDataURL(event.target.cedula.value);
@@ -128,11 +176,12 @@ function CreateCoordinator() {
                 Proyectos Asignados
               </label>
               <SelectComponent
-                options={OPCIONES_PROYECTOS}
+                options={proyectos}
                 value={selectedProyectos}
                 onChange={handleProyectosChange}
-                placeholder="Selecciona los proyectos"
+                placeholder={loadingProyectos ? "Cargando proyectos..." : "Selecciona los proyectos"}
                 isMulti={true}
+                disabled={loadingProyectos}
               />
             </div>
 
@@ -183,19 +232,30 @@ function CreateCoordinator() {
               >
                 Contraseña
               </label>
-              <Input
-                id="coordinator-password"
-                name="password"
-                type="password"
-                placeholder="Ingrese una contraseña segura"
-                required
-              />
+              <div className="relative">
+                <Input
+                  id="coordinator-password"
+                  name="password"
+                  type={showPassword ? "text" : "password"}
+                  placeholder="Ingrese una contraseña segura"
+                  required
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700"
+                >
+                  {showPassword ? <FiEyeOff size={18} /> : <FiEye size={18} />}
+                </button>
+              </div>
             </div>
           </div>
 
           <div className="mt-6 flex flex-col gap-4 w-full">
-            <div className="w-full">
-              {/* Aquí se puede agregar información adicional si es necesario */}
+            <div className="w-full p-3 bg-blue-50 border border-blue-200 rounded-md">
+              <p className="text-sm text-blue-700">
+                📧 Mandaremos un correo al coordinador con la contraseña
+              </p>
             </div>
 
             <DialogFooter className="flex flex-col sm:flex-row justify-between gap-2 w-full">
