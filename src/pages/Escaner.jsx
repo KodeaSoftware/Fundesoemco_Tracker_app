@@ -22,17 +22,32 @@ import { pageAnimationsParams } from "../motion/pageAnimation";
 import { Button } from "@/components/ui/button";
 import { getEmployees } from "../utils/employees";
 
-// Array de ejemplo de empleados
-
-
 function Escaner() {
   const [scanResult, setScanResult] = useState(null);
   const [isScanning, setIsScanning] = useState(false);
   const [scanner, setScanner] = useState(null);
   const [empleadoEncontrado, setEmpleadoEncontrado] = useState(undefined);
+  const [employees, setEmployees] = useState([]);
+  const [loadingEmployees, setLoadingEmployees] = useState(true);
 
-  const employees = getEmployees()
-  console.log(employees)
+  // Cargar empleados al montar el componente
+  useEffect(() => {
+    const loadEmployees = async () => {
+      try {
+        setLoadingEmployees(true);
+        const employeesData = await getEmployees();
+        if (employeesData) {
+          setEmployees(employeesData);
+        }
+      } catch (error) {
+        console.error('Error al cargar empleados:', error);
+      } finally {
+        setLoadingEmployees(false);
+      }
+    };
+
+    loadEmployees();
+  }, []);
 
   useEffect(() => {
     return () => {
@@ -43,20 +58,39 @@ function Escaner() {
   }, [scanner]);
 
   useEffect(() => {
-    if (scanResult) {
-      // Buscar el empleado en el array
-      const empleado = employees.map(
+    if (scanResult && employees.length > 0) {
+
+      // Buscar el empleado con diferentes métodos de comparación
+      let empleado = employees.find(
         (emp) => emp.cedula === parseInt(scanResult)
       );
+
+      // Si no se encuentra con parseInt, intentar como string
+      if (!empleado) {
+        empleado = employees.find(
+          (emp) => emp.cedula.toString() === scanResult.toString()
+        );
+      }
+
+      // Si aún no se encuentra, intentar sin espacios ni caracteres especiales
+      if (!empleado) {
+        const cedulaLimpia = scanResult.replace(/\s+/g, '').trim();
+        empleado = employees.find(
+          (emp) => emp.cedula.toString().replace(/\s+/g, '').trim() === cedulaLimpia
+        );
+      }
+
       setEmpleadoEncontrado(empleado);
     }
-  }, [scanResult]);
+  }, [scanResult, employees]);
 
   const handleConfirmarAsistencia = () => {
     // Aquí puedes agregar la lógica para confirmar la asistencia
-    alert(`Asistencia confirmada para ${empleadoEncontrado.name}`);
+    if (empleadoEncontrado) {
+      alert(`Asistencia confirmada para ${empleadoEncontrado.name}`);
+    }
     setScanResult(null);
-    setEmpleadoEncontrado(null);
+    setEmpleadoEncontrado(undefined);
   };
 
   const startScanning = async () => {
@@ -153,7 +187,18 @@ function Escaner() {
       <Header pageTitle="Escaner" />
       <PageLayout>
         <motion.div {...pageAnimationsParams}>
-          {!scanResult ? (
+          {loadingEmployees ? (
+            <div className="w-full max-w-4xl mx-auto p-6">
+              <Card>
+                <CardContent className="flex items-center justify-center py-8">
+                  <div className="text-center">
+                    <div className="w-8 h-8 border-4 border-blue-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+                    <p className="text-gray-600">Cargando empleados...</p>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+          ) : !scanResult ? (
             <div className="w-full max-w-4xl mx-auto p-6 space-y-6 ">
               {/* Header Card */}
               <Card>
@@ -189,6 +234,9 @@ function Escaner() {
                         </h3>
                         <p className="text-gray-500 text-sm">
                           Presiona "Iniciar Escaneo" para comenzar
+                        </p>
+                        <p className="text-xs text-gray-400 mt-2">
+                          {employees.length} empleados cargados
                         </p>
                       </div>
                     )}
@@ -284,7 +332,7 @@ function Escaner() {
                       <div className="space-y-4 ">
                         <div className="bg-gray-50 p-4 rounded-lg">
                           <p className="text-xl font-semibold text-gray-800">
-                            {empleadoEncontrado.name}
+                            {empleadoEncontrado.nombre}
                           </p>
                           <div className="mt-3 space-y-2">
                             <p className="text-sm text-gray-600 flex items-center gap-2">
@@ -293,19 +341,23 @@ function Escaner() {
                             </p>
                             <p className="text-sm text-gray-600 flex items-center gap-2">
                               <span className="font-medium">Departamento:</span>{" "}
-                              {empleadoEncontrado.department}
+                              {empleadoEncontrado.departamento}
                             </p>
                             <p className="text-sm text-gray-600 flex items-center gap-2">
                               <span className="font-medium">Cargo:</span>{" "}
                               {empleadoEncontrado.cargo}
                             </p>
-                            <p className="text-sm text-gray-600 flex items-center gap-2">
-                              <span className="font-medium">Contrato:</span>{" "}
-                              {empleadoEncontrado.contrato}
-                            </p>
+                            <div className="text-sm text-gray-600">
+                              <span className="font-medium">Proyectos:</span>
+                              <ul className="list-disc list-inside mt-1 ml-2">
+                                {empleadoEncontrado.proyecto.map((proyecto, index) => (
+                                  <li key={index}>{proyecto.nombre}</li>
+                                ))}
+                              </ul>
+                            </div>
                             <p className="text-sm text-gray-600 flex items-center gap-2">
                               <span className="font-medium">Teléfono:</span>{" "}
-                              {empleadoEncontrado.phone}
+                              {empleadoEncontrado.telefono}
                             </p>
                           </div>
                         </div>
@@ -321,7 +373,7 @@ function Escaner() {
                         <Button
                           onClick={() => {
                             setScanResult(null);
-                            setEmpleadoEncontrado(null);
+                            setEmpleadoEncontrado(undefined);
                           }}
                           variant="outline"
                           className="w-full h-12 cursor-pointer"
@@ -336,16 +388,58 @@ function Escaner() {
                         <p className="text-red-500 text-lg">
                           No se encontró ningún empleado con este QR
                         </p>
-                        <Button
-                          onClick={() => {
-                            setScanResult(null);
-                            setEmpleadoEncontrado(null);
-                          }}
-                          variant="outline"
-                          className="w-full sm:w-auto"
-                        >
-                          Volver a escanear
-                        </Button>
+                        <div className="bg-gray-50 p-4 rounded-lg text-left">
+                          <p className="text-sm text-gray-600 mb-2">
+                            <span className="font-medium">Cédula escaneada:</span> {scanResult}
+                          </p>
+                          <p className="text-sm text-gray-600 mb-2">
+                            <span className="font-medium">Tipo de dato:</span> {typeof scanResult}
+                          </p>
+                          <p className="text-sm text-gray-600 mb-2">
+                            <span className="font-medium">Total empleados cargados:</span> {employees.length}
+                          </p>
+                          <details className="text-xs text-gray-500">
+                            <summary className="cursor-pointer hover:text-gray-700">
+                              Ver cédulas disponibles (primeras 5)
+                            </summary>
+                            <div className="mt-2 space-y-1">
+                              {employees.slice(0, 5).map((emp, index) => (
+                                <div key={index} className="flex justify-between">
+                                  <span>{emp.name}:</span>
+                                  <span className="font-mono">{emp.cedula} ({typeof emp.cedula})</span>
+                                </div>
+                              ))}
+                              {employees.length > 5 && (
+                                <p className="text-gray-400">... y {employees.length - 5} más</p>
+                              )}
+                            </div>
+                          </details>
+                        </div>
+                        <div className="flex flex-col gap-2">
+                          <Button
+                            onClick={() => {
+                              setScanResult(null);
+                              setEmpleadoEncontrado(undefined);
+                            }}
+                            variant="outline"
+                            className="w-full"
+                          >
+                            Volver a escanear
+                          </Button>
+                          <Button
+                            onClick={() => {
+                              console.log('🔍 Debug info:');
+                              console.log('Cédula escaneada:', scanResult, typeof scanResult);
+                              console.log('Empleados:', employees);
+                              console.log('Comparación parseInt:', parseInt(scanResult));
+                              console.log('Comparación string:', scanResult.toString());
+                            }}
+                            variant="outline"
+                            className="w-full text-xs"
+                          >
+                            Ver logs en consola
+                          </Button>
+                        </div>
                       </div>
                     </div>
                   )}
