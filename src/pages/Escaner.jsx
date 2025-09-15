@@ -35,7 +35,7 @@ function Escaner() {
     const loadEmployees = async () => {
       try {
         setLoadingEmployees(true);
-        const employeesData = await getEmployees();
+        const employeesData = await getEmployees()
         if (employeesData) {
           setEmployees(employeesData);
         }
