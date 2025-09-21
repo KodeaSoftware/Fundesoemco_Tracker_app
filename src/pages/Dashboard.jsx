@@ -19,23 +19,7 @@ import { motion } from "motion/react";
 import { pageAnimationsParams } from "../motion/pageAnimation";
 
 function Dashboard() {
-  const [debugData, setDebugData] = useState(null);
-
-  useEffect(() => {
-    const loadDebugData = async () => {
-      try {
-        console.log('=== DEBUG: Cargando datos en Dashboard ===');
-        const data = await getAttendance();
-        console.log('=== DEBUG: Datos completos del endpoint ===');
-        console.log(JSON.stringify(data, null, 2));
-        setDebugData(data);
-      } catch (error) {
-        console.error('=== DEBUG: Error al cargar datos ===', error);
-      }
-    };
-
-    loadDebugData();
-  }, []);
+  
 
   return (
     <>

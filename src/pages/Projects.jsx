@@ -96,6 +96,7 @@ function Projects() {
                   title={project.titulo}
                   desc={project.descripcion}
                   createAt={formatDate(project.creadoEn)}
+                  jornada={project.jornada}
                 />
               ))
             ) : (

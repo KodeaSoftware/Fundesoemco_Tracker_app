@@ -18,7 +18,8 @@ function ProjectCard(props) {
         projectName: props.title,
         projectDesc: props.desc,
         createdAt: props.createAt,
-        id: props.id
+        id: props.id,
+        jornada: props.jornada
       }
     });
   };

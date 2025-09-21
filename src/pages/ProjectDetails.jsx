@@ -23,12 +23,12 @@ import { FaCamera } from "react-icons/fa";
 import { motion } from "motion/react";
 import { pageAnimationsParams } from "../motion/pageAnimation";
 import { LuUserCog, LuUsers, LuBuilding2 } from "react-icons/lu";
-import { getEmployeeByIdProjecAndContract } from "../utils/projects"
+import { getEmployeeByIdProjecAndContract, getProjectById } from "../utils/projects"
 import EditProject from "../elements/EditProject";
 
 const ProjectDetails = () => {
   const location = useLocation();
-  const { projectName, projectDesc, createdAt, id } = location.state || {};
+  const { projectName, projectDesc, createdAt, id, jornada } = location.state || {};
   const [backgroundImage, setBackgroundImage] = useState("/img-login.webp");
   const [employeeContratista, setEmployeeContratista] = useState([]);
   const [employeeDirecto, setEmployeeDirecto] = useState([]);
@@ -75,18 +75,39 @@ const ProjectDetails = () => {
     fetchEmployees();
   }, [id]);
 
-  // Inicializar projectData cuando se reciben los datos del proyecto
   useEffect(() => {
-    if (location.state) {
-      setProjectData({
-        id: id,
-        titulo: projectName,
-        descripcion: projectDesc,
-        creadoEn: createdAt,
-        jornada: null // Se puede agregar si está disponible en el estado
-      });
-    }
-  }, [location.state, id, projectName, projectDesc, createdAt]);
+    const fetchProjectData = async () => {
+      if (!id) return;
+
+      try {
+        const projectData = await getProjectById(id);
+        if (projectData) {
+          setProjectData(projectData);
+        } else {
+          // Fallback a los datos del location.state si no se puede obtener del servidor
+          setProjectData({
+            id: id,
+            titulo: projectName,
+            descripcion: projectDesc,
+            creadoEn: createdAt,
+            jornada: jornada
+          });
+        }
+      } catch (error) {
+        console.error('Error al obtener datos del proyecto:', error);
+        // Fallback a los datos del location.state en caso de error
+        setProjectData({
+          id: id,
+          titulo: projectName,
+          descripcion: projectDesc,
+          creadoEn: createdAt,
+          jornada: jornada
+        });
+      }
+    };
+
+    fetchProjectData();
+  }, [id, projectName, projectDesc, createdAt, jornada]);
 
   const handleProjectUpdated = (updatedProject) => {
     // Actualizar el estado local con los nuevos datos del proyecto

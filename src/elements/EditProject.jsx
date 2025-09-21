@@ -21,43 +21,38 @@ function EditProject({ project, onProjectUpdated }) {
     const [formData, setFormData] = useState({
         titulo: "",
         descripcion: "",
-        fechaInicio: new Date().toISOString().split('T')[0], // Fecha actual por defecto
-        horaEntrada: "08:00", // Hora de entrada por defecto
-        horaSalida: "17:00" // Hora de salida por defecto
-    });
+        fechaInicio: new Date().toISOString().split('T')[0],
+        horaEntrada: "08:00", 
+        horaSalida: "17:00" 
+    }); 
     const [isLoading, setIsLoading] = useState(false);
     const [isOpen, setIsOpen] = useState(false);
-
-    // Inicializar el formulario con los datos del proyecto cuando se abre
+    
     useEffect(() => {
         if (project && isOpen) {
-            // Extraer la fecha de la jornada si existe
-            let fechaInicio = "";
-            let horaEntrada = "";
-            let horaSalida = "";
+            let fechaInicio = new Date().toISOString().split('T')[0];
+            let horaEntrada = "08:00";
+            let horaSalida = "17:00"
 
-            if (project.jornada) {
+            if (project.jornada?.horaEntrada && project.jornada?.horaSalida) {
                 try {
                     const entrada = new Date(project.jornada.horaEntrada);
                     const salida = new Date(project.jornada.horaSalida);
-
-                    fechaInicio = entrada.toISOString().split('T')[0];
-                    horaEntrada = entrada.toTimeString().slice(0, 5);
-                    horaSalida = salida.toTimeString().slice(0, 5);
+                    
+                    if (!isNaN(entrada.getTime())) {
+                        const h = entrada.getHours().toString().padStart(2, '0');
+                        const m = entrada.getMinutes().toString().padStart(2, '0');
+                        horaEntrada = `${h}:${m}`;
+                        fechaInicio = entrada.toISOString().split('T')[0];
+                    }
+                    
+                    if (!isNaN(salida.getTime())) {
+                        const h = salida.getHours().toString().padStart(2, '0');
+                        const m = salida.getMinutes().toString().padStart(2, '0');
+                        horaSalida = `${h}:${m}`;
+                    }
                 } catch (error) {
-                    console.error('Error al parsear fechas de jornada:', error);
                 }
-            }
-
-            // Si no hay jornada, establecer valores por defecto
-            if (!horaEntrada) {
-                horaEntrada = "08:00"; // Hora de entrada por defecto
-            }
-            if (!horaSalida) {
-                horaSalida = "17:00"; // Hora de salida por defecto
-            }
-            if (!fechaInicio) {
-                fechaInicio = new Date().toISOString().split('T')[0]; // Fecha actual por defecto
             }
 
             setFormData({
@@ -80,7 +75,6 @@ function EditProject({ project, onProjectUpdated }) {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        // Validación básica
         if (!formData.titulo || !formData.descripcion || !formData.fechaInicio || !formData.horaEntrada || !formData.horaSalida) {
             alert("Por favor, completa todos los campos");
             return;
@@ -89,53 +83,33 @@ function EditProject({ project, onProjectUpdated }) {
         setIsLoading(true);
 
         try {
-            // Crear las fechas ISO para la jornada
             const fechaInicio = new Date(formData.fechaInicio);
             const [horaEntrada, minutoEntrada] = formData.horaEntrada.split(':');
             const [horaSalida, minutoSalida] = formData.horaSalida.split(':');
 
             const jornadaEntrada = new Date(fechaInicio);
-            jornadaEntrada.setHours(parseInt(horaEntrada), parseInt(minutoEntrada), 0, 0);
+            console.log(jornadaEntrada.setHours(parseInt(horaEntrada), parseInt(minutoEntrada), 0, 0))
 
             const jornadaSalida = new Date(fechaInicio);
-            jornadaSalida.setHours(parseInt(horaSalida), parseInt(minutoSalida), 0, 0);
+            console.log(jornadaSalida.setHours(parseInt(horaSalida), parseInt(minutoSalida), 0, 0))
 
-            // Crear el objeto del proyecto en el formato requerido
             const projectData = {
                 id: project.id,
                 titulo: formData.titulo,
                 descripcion: formData.descripcion,
-                creadoEn: (() => {
-                    try {
-                        if (project.creadoEn) {
-                            const fecha = new Date(project.creadoEn);
-                            if (!isNaN(fecha.getTime())) {
-                                return fecha.toISOString();
-                            }
-                        }
-                        return new Date().toISOString();
-                    } catch (error) {
-                        console.warn('Error al procesar fecha creadoEn:', error);
-                        return new Date().toISOString();
-                    }
-                })(),
+                creadoEn: project.creadoEn ? new Date(project.creadoEn).toISOString() : new Date().toISOString(),
                 jornada: {
-                    horaEntrada: jornadaEntrada.toISOString(),
-                    horaSalida: jornadaSalida.toISOString()
+                     horaEntrada: "hola",
+                    horaSalida: "hola"
                 }
             };
-
             await updateProject(projectData);
-
-            // Cerrar el diálogo y notificar al componente padre
             setIsOpen(false);
-            if (onProjectUpdated) {
-                onProjectUpdated(projectData);
-            }
-
+            onProjectUpdated?.(projectData);
+            console.log(projectData)
         } catch (error) {
-            console.error("Error al actualizar el proyecto:", error);
-            alert("Error al actualizar el proyecto. Por favor, intenta de nuevo.");
+           
+            console.log(error)
         } finally {
             setIsLoading(false);
         }
@@ -150,7 +124,7 @@ function EditProject({ project, onProjectUpdated }) {
                 </Button>
             </DialogTrigger>
 
-            <DialogContent className="w-[400px] max-w-[400px] max-w-[600px] sm:max-w-[600px] max-h-[90vh] overflow-y-auto">
+            <DialogContent className="w-[400px] max-w-[600px] sm:max-w-[600px] max-h-[90vh] overflow-y-auto">
                 <DialogHeader>
                     <DialogTitle className="text-xl font-bold mt-2 flex items-center gap-2">
                         Editar Proyecto <IoBusinessOutline />
@@ -192,7 +166,7 @@ function EditProject({ project, onProjectUpdated }) {
                         <Textarea
                             id="project-description"
                             placeholder="Ingresa la descripción del proyecto"
-                            className="mt-2 resize-none max-w-[300px] max-h-[90px] overflow-auto text-wrap break-words max-w-[550px]"
+                            className="mt-2 resize-none max-w-[550px] max-h-[90px] overflow-auto text-wrap break-words"
                             value={formData.descripcion}
                             onChange={(e) => handleInputChange('descripcion', e.target.value)}
                             maxLength={500}
@@ -235,7 +209,7 @@ function EditProject({ project, onProjectUpdated }) {
                                 required
                             >
                                 <SelectTrigger className="mt-1 h-9 w-full">
-                                    <SelectValue placeholder="Entrada" />
+                                    <SelectValue placeholder="Seleccionar hora de entrada" />
                                 </SelectTrigger>
                                 <SelectContent className="max-h-48">
                                     {Array.from({ length: 24 }, (_, i) => {
@@ -267,7 +241,7 @@ function EditProject({ project, onProjectUpdated }) {
                                 required
                             >
                                 <SelectTrigger className="mt-1 h-9 w-full">
-                                    <SelectValue placeholder="Salida" />
+                                    <SelectValue placeholder="Seleccionar hora de salida" />
                                 </SelectTrigger>
                                 <SelectContent className="max-h-48">
                                     {Array.from({ length: 24 }, (_, i) => {
