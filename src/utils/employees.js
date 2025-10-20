@@ -100,7 +100,6 @@ export const getAttendance = async () => {
     }
     const data = await response.json();
 
-    // Verificar si los datos están en una propiedad específica
     if (data && data.Data) {
       return data.Data;
     } else if (Array.isArray(data)) {
@@ -112,3 +111,64 @@ export const getAttendance = async () => {
     return null;
   }
 };
+
+// Función para formatear datos de asistencia para el gráfico semanal
+export const formatAttendanceForChart = (attendanceData) => {
+  if (!attendanceData || !Array.isArray(attendanceData)) {
+    return [];
+  }
+
+  // Nombres de días en español
+  const diasSemana = [    'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'];
+  
+  // Inicializar contadores para cada día de la semana
+  const contadoresPorDia = {
+  
+    'Lunes': 0,
+    'Martes': 0,
+    'Miércoles': 0,
+    'Jueves': 0,
+    'Viernes': 0,
+    'Sábado': 0,
+    'Domingo': 0
+  };
+
+  // Procesar cada registro de asistencia
+  attendanceData.forEach(registro => {
+    // Usar hora_asistencia como fuente principal, con fallback a fecha_asistencia
+    const fechaAsistencia = registro.hora_asistencia || registro.fecha_asistencia;
+    
+    if (fechaAsistencia && registro.estado === 'tarde') {
+      try {
+        // Convertir la fecha/hora a objeto Date
+        const fecha = new Date(fechaAsistencia);
+        
+        // Verificar que la fecha sea válida
+        if (isNaN(fecha.getTime())) {
+          console.warn('Fecha inválida encontrada:', fechaAsistencia);
+          return;
+        }
+        
+        // Obtener el día de la semana (0 = Domingo, 1 = Lunes, etc.)
+        const diaSemana = fecha.getDay();
+        const nombreDia = diasSemana[diaSemana];
+        
+        // Incrementar el contador para asistencias puntuales
+        contadoresPorDia[nombreDia]++;
+      } catch (error) {
+        console.error('Error procesando fecha de asistencia:', fechaAsistencia, error);
+      }
+    }
+  });
+
+  // Convertir el objeto a array para el gráfico
+  const chartData = diasSemana.map(dia => ({
+    dia: dia,
+    puntual: contadoresPorDia[dia]
+  }));
+
+  return chartData;
+};
+
+
+
