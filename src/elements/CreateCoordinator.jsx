@@ -11,11 +11,11 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Textarea } from "@/components/ui/textarea";
 import { IoBusinessOutline } from "react-icons/io5";
 import { FiUserPlus } from "react-icons/fi";
 import { FiEye, FiEyeOff } from "react-icons/fi";
 import SelectComponent from "./SelectComponent";
+import ErrorModal from "./ErrorModal";
 import { createCoordinador } from "../utils/coordinator";
 import { getProjects } from "../utils/projects";
 import { sendPassword } from "../utils/email";
@@ -28,6 +28,17 @@ function CreateCoordinator() {
   const [proyectos, setProyectos] = useState([]);
   const [loadingProyectos, setLoadingProyectos] = useState(true);
 
+  // Estados para el Modal de Error
+  const [errorModalOpen, setErrorModalOpen] = useState(false);
+  const [errorTitle, setErrorTitle] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
+
+  const showError = (title, message) => {
+    setErrorTitle(title);
+    setErrorMessage(message);
+    setErrorModalOpen(true);
+  };
+
   // Cargar proyectos al montar el componente
   useEffect(() => {
     const cargarProyectos = async () => {
@@ -35,7 +46,6 @@ function CreateCoordinator() {
         setLoadingProyectos(true);
         const proyectosData = await getProjects();
         if (proyectosData) {
-          // Transformar los datos para el SelectComponent
           const opcionesProyectos = proyectosData.map(proyecto => ({
             value: proyecto.id,
             label: proyecto.titulo
@@ -44,7 +54,6 @@ function CreateCoordinator() {
         }
       } catch (error) {
         console.error('Error al cargar proyectos:', error);
-        // Fallback a opciones por defecto si hay error
         setProyectos([
           { value: "cvc", label: "CVC" },
           { value: "Fundesoemco", label: "Fundesoemco" },
@@ -62,17 +71,27 @@ function CreateCoordinator() {
     setIsLoading(true);
 
     try {
-
+      if (!event.target.cedula.value || !event.target.password.value) {
+        showError("Campos Requeridos", "Por favor completa la cédula y la contraseña.");
+        setIsLoading(false);
+        return;
+      }
 
       const newCoordinator = {
-        cedula: event.target.cedula.value,
+        cedula: parseInt(event.target.cedula.value) || 0,
         nombre: event.target.nombre.value,
         departamento: event.target.departamento.value,
         cargo: event.target.cargo.value,
         correo: event.target.email.value,
-        proyecto: [selectedProyectos],
+        proyecto: Array.isArray(selectedProyectos) ? selectedProyectos : [selectedProyectos],
         password: event.target.password.value
       };
+
+      if (newCoordinator.cedula === 0) {
+        showError("Cédula Inválida", "La cédula debe ser un número válido.");
+        setIsLoading(false);
+        return;
+      }
 
       const creado = await createCoordinador(newCoordinator);
       console.log('Coordinador creado:', creado);
@@ -84,18 +103,13 @@ function CreateCoordinator() {
           nombre: event.target.nombre.value,
           password: event.target.password.value
         };
-        console.log(emailData)
         await sendPassword(emailData);
-        console.log('Correo enviado exitosamente');
       } catch (emailError) {
-
         console.error('Error al enviar el correo:', emailError);
       }
 
-
-      // Generar QR con la cédula
+      // Generar QR
       const url = await QRCode.toDataURL(event.target.cedula.value);
-      // Crear y descargar el QR
       const link = document.createElement('a');
       link.href = url;
       link.download = `QR_${event.target.nombre.value}_${event.target.cedula.value}.png`;
@@ -109,7 +123,7 @@ function CreateCoordinator() {
 
     } catch (error) {
       console.error('Error al crear coordinador:', error);
-      alert('Error al crear el coordinador. Por favor, inténtalo de nuevo.');
+      showError("Error de Creación", error.message || "No se pudo crear el coordinador. Inténtalo de nuevo.");
     } finally {
       setIsLoading(false);
     }
@@ -120,165 +134,99 @@ function CreateCoordinator() {
   };
 
   return (
-    <Dialog>
-      <DialogTrigger asChild>
-        <Button className="bg-[#00BF40] hover:bg-[#00a636] cursor-pointer">
-          Crear Coordinador
-          <FiUserPlus className="text-back-100" />
-        </Button>
-      </DialogTrigger>
+    <>
+      <ErrorModal 
+        isOpen={errorModalOpen} 
+        onClose={() => setErrorModalOpen(false)} 
+        title={errorTitle} 
+        message={errorMessage} 
+      />
+      <Dialog>
+        <DialogTrigger asChild>
+          <Button className="bg-[#00BF40] hover:bg-[#00a636] cursor-pointer">
+            Crear Coordinador
+            <FiUserPlus className="text-back-100" />
+          </Button>
+        </DialogTrigger>
 
-      <DialogContent className="sm:max-w-[700px] flex flex-col items-center p-4 sm:p-6">
-        <DialogHeader className="w-full pl-0 sm:pl-4">
-          <DialogTitle className="text-lg sm:text-xl font-bold mt-2 flex items-center gap-2">
-            Nuevo Coordinador <FiUserPlus className="text-back-100" />
-          </DialogTitle>
-          <DialogDescription className="text-start text-sm sm:text-base">
-            Al crear un nuevo coordinador, también se creará una cuenta de inicio de sesión al sistema para el coordinador, por favor completa correctamente la información.
-          </DialogDescription>
-        </DialogHeader>
-        <form className="flex flex-col h-full w-full" onSubmit={handleCreateCoordinator} >
+        <DialogContent className="sm:max-w-[700px] flex flex-col items-center p-4 sm:p-6">
+          <DialogHeader className="w-full pl-0 sm:pl-4">
+            <DialogTitle className="text-lg sm:text-xl font-bold mt-2 flex items-center gap-2">
+              Nuevo Coordinador <FiUserPlus className="text-back-100" />
+            </DialogTitle>
+            <DialogDescription className="text-start text-sm sm:text-base">
+              Al crear un nuevo coordinador, también se creará una cuenta de inicio de sesión al sistema para el coordinador.
+            </DialogDescription>
+          </DialogHeader>
+          <form className="flex flex-col h-full w-full" onSubmit={handleCreateCoordinator}>
+            <div className="flex flex-col sm:flex-row flex-wrap gap-4 w-full">
+              <div className="w-full sm:w-[300px] flex flex-col gap-2">
+                <label className="text-sm font-medium text-gray-700">Nombre y Apellido</label>
+                <Input name="nombre" placeholder="Ej: Juan Pérez" required />
 
-          <div className="flex flex-col sm:flex-row flex-wrap gap-4 w-full">
-            <div className="w-full sm:w-[300px] flex flex-col gap-2">
-              <label
-                htmlFor="coordinator-fullname"
-                className="text-sm font-medium text-gray-700"
-              >
-                Nombre y Apellido
-              </label>
-              <Input
-                id="coordinator-fullname"
-                placeholder="Ej: Juan Pérez"
-                name="nombre"
-                required
-              />
+                <label className="text-sm font-medium text-gray-700">ID / Cédula</label>
+                <Input name="cedula" placeholder="Ej: 1234567890" type="number" required />
 
-              <label
-                htmlFor="coordinator-id"
-                className="text-sm font-medium text-gray-700"
-              >
-                ID / Cédula
-              </label>
-              <Input
-                id="coordinator-id"
-                name="cedula"
-                placeholder="Ej: 1234567890"
-                type="number"
-                className="appearance-none [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none [&::-moz-appearance]:textfield"
-                required
-              />
-
-              <label
-                htmlFor="coordinator-projects"
-                className="text-sm font-medium text-gray-700 "
-              >
-                Proyectos Asignados
-              </label>
-              <SelectComponent
-                options={proyectos}
-                value={selectedProyectos}
-                onChange={handleProyectosChange}
-                placeholder={loadingProyectos ? "Cargando proyectos..." : "Selecciona los proyectos"}
-                isMulti={true}
-                disabled={loadingProyectos}
-              />
-            </div>
-
-            <div className="w-full sm:w-[300px] flex flex-col gap-2">
-              <label
-                htmlFor="coordinator-department"
-                className="text-sm font-medium text-gray-700"
-              >
-                Departamento
-              </label>
-              <Input
-                id="coordinator-department"
-                name="departamento"
-                placeholder="Ej: Recursos Humanos"
-                required
-              />
-
-              <label
-                htmlFor="coordinator-role"
-                className="text-sm font-medium text-gray-700"
-              >
-                Cargo
-              </label>
-              <Input
-                id="coordinator-role"
-                name="cargo"
-                placeholder="Ej: Coordinador"
-                required
-              />
-
-              <label
-                htmlFor="coordinator-email"
-                className="text-sm font-medium text-gray-700"
-              >
-                Correo Electrónico
-              </label>
-              <Input
-                id="coordinator-email"
-                name="email"
-                type="email"
-                placeholder="Ej: juan.perez@empresa.com"
-                required
-              />
-
-              <label
-                htmlFor="coordinator-password"
-                className="text-sm font-medium text-gray-700"
-              >
-                Contraseña
-              </label>
-              <div className="relative">
-                <Input
-                  id="coordinator-password"
-                  name="password"
-                  type={showPassword ? "text" : "password"}
-                  placeholder="Ingrese una contraseña segura"
-                  required
+                <label className="text-sm font-medium text-gray-700">Proyectos Asignados</label>
+                <SelectComponent
+                  options={proyectos}
+                  value={selectedProyectos}
+                  onChange={handleProyectosChange}
+                  placeholder={loadingProyectos ? "Cargando..." : "Selecciona proyectos"}
+                  isMulti={true}
+                  disabled={loadingProyectos}
                 />
-                <button
-                  type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700"
-                >
-                  {showPassword ? <FiEyeOff size={18} /> : <FiEye size={18} />}
-                </button>
+              </div>
+
+              <div className="w-full sm:w-[300px] flex flex-col gap-2">
+                <label className="text-sm font-medium text-gray-700">Departamento</label>
+                <Input name="departamento" placeholder="Ej: Recursos Humanos" required />
+
+                <label className="text-sm font-medium text-gray-700">Cargo</label>
+                <Input name="cargo" placeholder="Ej: Coordinador" required />
+
+                <label className="text-sm font-medium text-gray-700">Correo Electrónico</label>
+                <Input name="email" type="email" placeholder="Ej: juan.perez@empresa.com" required />
+
+                <label className="text-sm font-medium text-gray-700">Contraseña</label>
+                <div className="relative">
+                  <Input
+                    name="password"
+                    type={showPassword ? "text" : "password"}
+                    placeholder="Contraseña segura"
+                    required
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500"
+                  >
+                    {showPassword ? <FiEyeOff size={18} /> : <FiEye size={18} />}
+                  </button>
+                </div>
               </div>
             </div>
-          </div>
 
-          <div className="mt-6 flex flex-col gap-4 w-full">
-            <div className="w-full p-3 bg-blue-50 border border-blue-200 rounded-md">
-              <p className="text-sm text-blue-700">
-                📧 Mandaremos un correo al coordinador con la contraseña
-              </p>
-            </div>
+            <div className="mt-6 flex flex-col gap-4 w-full">
+              <div className="w-full p-3 bg-blue-50 border border-blue-200 rounded-md">
+                <p className="text-sm text-blue-700">📧 Se enviará un correo con la contraseña al coordinador.</p>
+              </div>
 
-            <DialogFooter className="flex flex-col sm:flex-row justify-between gap-2 w-full">
-              <Button
-                type="submit"
-                disabled={isLoading}
-                className="w-full sm:w-auto bg-[#00BF40] hover:bg-[#00a636] cursor-pointer disabled:opacity-50"
-              >
-                {isLoading ? "Guardando..." : "Guardar Coordinador"}
-              </Button>
-              <DialogClose asChild>
-                <Button
-                  type="button"
-                  className="w-full sm:w-auto bg-white border text-black hover:bg-gray-100 cursor-pointer"
-                >
-                  Cancelar
+              <DialogFooter className="flex flex-col sm:flex-row justify-between gap-2 w-full">
+                <Button type="submit" disabled={isLoading} className="bg-[#00BF40] hover:bg-[#00a636] cursor-pointer">
+                  {isLoading ? "Guardando..." : "Guardar Coordinador"}
                 </Button>
-              </DialogClose>
-            </DialogFooter>
-          </div>
-        </form>
-      </DialogContent>
-    </Dialog>
+                <DialogClose asChild>
+                  <Button type="button" className="bg-white border text-black hover:bg-gray-100 cursor-pointer">
+                    Cancelar
+                  </Button>
+                </DialogClose>
+              </DialogFooter>
+            </div>
+          </form>
+        </DialogContent>
+      </Dialog>
+    </>
   );
 }
 

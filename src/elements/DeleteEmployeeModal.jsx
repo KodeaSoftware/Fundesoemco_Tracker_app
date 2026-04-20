@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import { deleteEmployee } from "../utils/employees";
-function DeleteEmployeeModal({ onCloseParent, id }) {
+function DeleteEmployeeModal({ onCloseParent, id, onConfirm }) {
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>
@@ -34,10 +34,11 @@ function DeleteEmployeeModal({ onCloseParent, id }) {
           <AlertDialogAction
             className="bg-white text-red-500 border-1 border-red-400 hover:bg-red-500 hover:text-white cursor-pointer"
             onClick={() => {
-           
-
-              deleteEmployee(id);
-              
+              if (onConfirm) {
+                onConfirm(id);
+              } else {
+                deleteEmployee(id);
+              }
             }}
           >
             Confirmar

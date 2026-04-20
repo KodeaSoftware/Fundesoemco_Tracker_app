@@ -20,7 +20,7 @@ import PageLayout from "../layout/PageLayout";
 import { motion } from "motion/react";
 import { pageAnimationsParams } from "../motion/pageAnimation";
 import { Button } from "@/components/ui/button";
-import { getEmployees } from "../utils/employees";
+import { getEmployees, recordAttendance } from "../utils/employees";
 
 function Escaner() {
   const [scanResult, setScanResult] = useState(null);
@@ -29,6 +29,8 @@ function Escaner() {
   const [empleadoEncontrado, setEmpleadoEncontrado] = useState(undefined);
   const [employees, setEmployees] = useState([]);
   const [loadingEmployees, setLoadingEmployees] = useState(true);
+  const [selectedProjectId, setSelectedProjectId] = useState("");
+  const [submitting, setSubmitting] = useState(false);
 
   // Cargar empleados al montar el componente
   useEffect(() => {
@@ -36,9 +38,7 @@ function Escaner() {
       try {
         setLoadingEmployees(true);
         const employeesData = await getEmployees()
-        if (employeesData) {
-          setEmployees(employeesData);
-        }
+        setEmployees(employeesData || []);
       } catch (error) {
         console.error('Error al cargar empleados:', error);
       } finally {
@@ -81,16 +81,38 @@ function Escaner() {
       }
 
       setEmpleadoEncontrado(empleado);
+
+      // Auto-select project if only one exists
+      if (empleado && empleado.proyecto && empleado.proyecto.length > 0) {
+        if (empleado.proyecto.length === 1) {
+          setSelectedProjectId(empleado.proyecto[0].id);
+        } else {
+          setSelectedProjectId(""); // Reset so user must select
+        }
+      }
     }
   }, [scanResult, employees]);
 
-  const handleConfirmarAsistencia = () => {
-    // Aquí puedes agregar la lógica para confirmar la asistencia
-    if (empleadoEncontrado) {
-      alert(`Asistencia confirmada para ${empleadoEncontrado.name}`);
+  const handleConfirmarAsistencia = async () => {
+    if (!empleadoEncontrado) return;
+    
+    if (!selectedProjectId) {
+      alert("Por favor selecciona un proyecto");
+      return;
     }
-    setScanResult(null);
-    setEmpleadoEncontrado(undefined);
+
+    try {
+      setSubmitting(true);
+      await recordAttendance(empleadoEncontrado.cedula, selectedProjectId);
+      alert(`Asistencia confirmada para ${empleadoEncontrado.nombre}`);
+      setScanResult(null);
+      setEmpleadoEncontrado(undefined);
+      setSelectedProjectId("");
+    } catch (error) {
+      alert(`Error: ${error.message}`);
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   const startScanning = async () => {
@@ -359,16 +381,46 @@ function Escaner() {
                               <span className="font-medium">Teléfono:</span>{" "}
                               {empleadoEncontrado.telefono}
                             </p>
+                            
+                            {/* Selección de Proyecto */}
+                            <div className="mt-4 pt-4 border-t border-gray-200">
+                              <label className="block text-sm font-medium text-gray-700 mb-1">
+                                {empleadoEncontrado.proyecto.length > 1 
+                                  ? "Selecciona el proyecto para esta asistencia:" 
+                                  : "Proyecto asignado:"}
+                              </label>
+                              {empleadoEncontrado.proyecto.length > 1 ? (
+                                <select 
+                                  value={selectedProjectId}
+                                  onChange={(e) => setSelectedProjectId(e.target.value)}
+                                  className="w-full p-2 border border-gray-300 rounded-md text-sm focus:ring-blue-500 focus:border-blue-500 bg-white"
+                                >
+                                  <option value="">-- Selecciona un proyecto --</option>
+                                  {empleadoEncontrado.proyecto.map((p) => (
+                                    <option key={p.id} value={p.id}>{p.nombre}</option>
+                                  ))}
+                                </select>
+                              ) : (
+                                <div className="p-2 bg-blue-50 text-blue-700 rounded-md text-sm font-medium">
+                                  {empleadoEncontrado.proyecto[0]?.nombre || "Sin proyecto asignado"}
+                                </div>
+                              )}
+                            </div>
                           </div>
                         </div>
                       </div>
                       <div className="flex flex-col  gap-3 pt-6 mt-auto ">
                         <Button
                           onClick={handleConfirmarAsistencia}
+                          disabled={submitting || (empleadoEncontrado.proyecto.length > 1 && !selectedProjectId)}
                           className="w-full bg-[#00BF40] hover:bg-[#00a636] cursor-pointer h-12"
                         >
-                          <FiCheckCircle className="mr-2" />
-                          Confirmar Asistencia
+                          {submitting ? (
+                            <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin mr-2"></div>
+                          ) : (
+                            <FiCheckCircle className="mr-2" />
+                          )}
+                          {submitting ? "Registrando..." : "Confirmar Asistencia"}
                         </Button>
                         <Button
                           onClick={() => {

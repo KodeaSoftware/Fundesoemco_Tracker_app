@@ -1,5 +1,5 @@
 // React
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 
 // Layout
 import PageLayout from "../layout/PageLayout";
@@ -26,14 +26,13 @@ function Projects() {
   const [projects, setProjects] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
+  const [showArchived, setShowArchived] = useState(false);
 
   useEffect(() => {
     const fetchProjects = async () => {
       try {
         const projectsData = await getProjects();
-        if (projectsData) {
-          setProjects(projectsData);
-        }
+        setProjects(projectsData || []);
       } catch (error) {
         console.error("Error al cargar proyectos:", error);
       } finally {
@@ -57,11 +56,20 @@ function Projects() {
   };
 
 
-  const filteredProjects = projects.filter(project =>
-    project.titulo?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    project.descripcion?.toLowerCase().includes(searchTerm.toLowerCase())
-    ||
-    formatDate(project.creadoEn)?.toLowerCase().includes(searchTerm.toLowerCase())
+  const filteredProjects = useMemo(
+    () => {
+      const baseFilter = projects.filter(project => {
+        const matchesSearch = project.titulo?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          project.descripcion?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          formatDate(project.creadoEn)?.toLowerCase().includes(searchTerm.toLowerCase());
+
+        const projectStatus = project.estado || 'activo';
+        const statusMatch = showArchived ? projectStatus === 'archivado' : projectStatus === 'activo';
+
+        return matchesSearch && statusMatch;
+      });
+      return baseFilter;
+    }, [projects, searchTerm, showArchived]
   );
 
 
@@ -79,9 +87,12 @@ function Projects() {
                 onChange={(e) => setSearchTerm(e.target.value)}
               />
               <CreateProject />
-              <Button className="bg-gray-200 border hover:bg-white-200  cursor-pointer text-gray-500 sm:w-auto cursor-not-allowed ">
-                Proyectos archivados
-                <TbArchive />
+              <Button 
+                onClick={() => setShowArchived(!showArchived)}
+                className={`${showArchived ? 'bg-amber-100 text-amber-700 border-amber-200' : 'bg-gray-200 border text-gray-500'} hover:bg-white-200 cursor-pointer sm:w-auto`}
+              >
+                {showArchived ? "Ver Activos" : "Proyectos archivados"}
+                <TbArchive className={showArchived ? "text-amber-700" : ""} />
               </Button>
             </div>
           </div>
@@ -97,6 +108,7 @@ function Projects() {
                   desc={project.descripcion}
                   createAt={formatDate(project.creadoEn)}
                   jornada={project.jornada}
+                  estado={project.estado}
                 />
               ))
             ) : (

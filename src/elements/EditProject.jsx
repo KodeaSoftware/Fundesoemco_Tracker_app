@@ -23,7 +23,8 @@ function EditProject({ project, onProjectUpdated }) {
         descripcion: "",
         fechaInicio: new Date().toISOString().split('T')[0],
         horaEntrada: "08:00", 
-        horaSalida: "17:00" 
+        horaSalida: "17:00",
+        estado: "activo"
     }); 
     const [isLoading, setIsLoading] = useState(false);
     const [isOpen, setIsOpen] = useState(false);
@@ -60,7 +61,8 @@ function EditProject({ project, onProjectUpdated }) {
                 descripcion: project.descripcion || "",
                 fechaInicio: fechaInicio,
                 horaEntrada: horaEntrada,
-                horaSalida: horaSalida
+                horaSalida: horaSalida,
+                estado: project.estado || "activo"
             });
         }
     }, [project, isOpen]);
@@ -88,10 +90,10 @@ function EditProject({ project, onProjectUpdated }) {
             const [horaSalida, minutoSalida] = formData.horaSalida.split(':');
 
             const jornadaEntrada = new Date(fechaInicio);
-            console.log(jornadaEntrada.setHours(parseInt(horaEntrada), parseInt(minutoEntrada), 0, 0))
+            jornadaEntrada.setHours(parseInt(horaEntrada), parseInt(minutoEntrada), 0, 0);
 
             const jornadaSalida = new Date(fechaInicio);
-            console.log(jornadaSalida.setHours(parseInt(horaSalida), parseInt(minutoSalida), 0, 0))
+            jornadaSalida.setHours(parseInt(horaSalida), parseInt(minutoSalida), 0, 0);
 
             const projectData = {
                 id: project.id,
@@ -99,9 +101,10 @@ function EditProject({ project, onProjectUpdated }) {
                 descripcion: formData.descripcion,
                 creadoEn: project.creadoEn ? new Date(project.creadoEn).toISOString() : new Date().toISOString(),
                 jornada: {
-                     horaEntrada: "hola",
-                    horaSalida: "hola"
-                }
+                    horaEntrada: jornadaEntrada.toISOString(),
+                    horaSalida: jornadaSalida.toISOString()
+                },
+                estado: formData.estado
             };
             await updateProject(projectData);
             setIsOpen(false);
@@ -259,6 +262,31 @@ function EditProject({ project, onProjectUpdated }) {
                                 </SelectContent>
                             </Select>
                         </div>
+                    </div>
+
+                    <div className="pt-2">
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                            Estado del Proyecto
+                        </label>
+                        <div className="flex items-center gap-4 p-3 bg-gray-50 rounded-lg border">
+                            <span className={`text-sm font-semibold ${formData.estado === 'activo' ? 'text-green-600' : 'text-amber-600'}`}>
+                                {formData.estado === 'activo' ? 'Proyecto Activo' : 'Proyecto Archivado'}
+                            </span>
+                            <Button 
+                                type="button" 
+                                variant="outline" 
+                                size="sm" 
+                                className={`ml-auto ${formData.estado === 'activo' ? 'hover:bg-amber-50 hover:text-amber-700' : 'hover:bg-green-50 hover:text-green-700'}`}
+                                onClick={() => handleInputChange('estado', formData.estado === 'activo' ? 'archivado' : 'activo')}
+                            >
+                                {formData.estado === 'activo' ? 'Archivar' : 'Desarchivar'}
+                            </Button>
+                        </div>
+                        <p className="text-[11px] text-gray-500 mt-1">
+                            {formData.estado === 'activo' 
+                                ? 'Los proyectos archivados se ocultan de la lista principal.' 
+                                : 'Restaurar el proyecto para que sea visible en el panel principal.'}
+                        </p>
                     </div>
 
                     <DialogFooter className="flex justify-between mt-6">

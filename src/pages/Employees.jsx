@@ -13,7 +13,8 @@ import { pageAnimationsParams } from "../motion/pageAnimation";
 import { InfoEmployeTable } from "../elements/InfoEmployeTable";
 
 import CreateEmployee from "../elements/CreateEmployee";
-import EmployeeCSV from "../elements/employeeCSV";
+import CreateContractType from "../elements/CreateContractType";
+import EmployeeBulk from "../elements/EmployeeBulk";
 
 import { getEmployees } from "../utils/employees.js";
 
@@ -27,7 +28,7 @@ function Employees() {
   useEffect(() => {
     const fetchEmployees = async () => {
       const employees = await getEmployees();
-      setEmployeesList(employees);
+      setEmployeesList(employees || []);
     };
     fetchEmployees();
   }, []);
@@ -57,21 +58,14 @@ function Employees() {
                 onChange={(e) => setSearch(e.target.value)}
               />
               <CreateEmployee />
+              <CreateContractType />
 
-
-              {/*
-
-              PENDIENTE IMPLEMENTAR ESTO DESPUES DEL MVP
-              
-                <EmployeeCSV
+              <EmployeeBulk
                 onUpload={(data) => {
                   setEmployeesList(data);
                   setFiltered(data);
                 }}
-
-
               />
-              */}
             </div>
 
             {/* Componente que renderiza empleados */}

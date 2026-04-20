@@ -24,7 +24,9 @@ const AppRoutes = () => {
         <Route path="/" element={<Dashboard />} />
         <Route path="/project-list" element={<Projects />} />
         <Route path="/employee-list" element={<Employees />} />
-        <Route path="/coordinator-list" element={<Coordinator />} />
+        {localStorage.getItem("role") === "rrhh" && (
+           <Route path="/coordinator-list" element={<Coordinator />} />
+        )}
         <Route path="/project/:projectName" element={<ProjectDetails />} />
         <Route path="/escaner" element={<Escaner />} />
       </Routes>

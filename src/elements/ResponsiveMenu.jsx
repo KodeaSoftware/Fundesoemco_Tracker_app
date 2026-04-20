@@ -37,14 +37,18 @@ function ResponsiveMenu(props) {
           <FiUsers className="text-black-100" />
           Lista de Empleados
         </Link>
-        <hr className="border-gray-200" />
-        <Link
-          to="/coordinator-list"
-          className=" p-2 flex items-center justify-start gap-2 rounded-sm text-gray-700 hover:bg-gray-100 font-semibold hover:transition-transform duration-300 ease-in-out "
-        >
-          <LuUserCog className="text-black-100" />
-          Lista de Coordinadores
-        </Link>
+        {localStorage.getItem("role") === "rrhh" && (
+          <>
+            <hr className="border-gray-200" />
+            <Link
+              to="/coordinator-list"
+              className=" p-2 flex items-center justify-start gap-2 rounded-sm text-gray-700 hover:bg-gray-100 font-semibold hover:transition-transform duration-300 ease-in-out "
+            >
+              <LuUserCog className="text-black-100" />
+              Lista de Coordinadores
+            </Link>
+          </>
+        )}
         <hr className="border-gray-200" />
         <Link
           to="/escaner"

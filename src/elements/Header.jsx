@@ -170,15 +170,17 @@ function Header(props) {
                       <FiUsers className="text-black-100" />
                     </Link>
                   </NavigationMenuLink>
-                  <NavigationMenuLink>
-                    <Link
-                      to="/coordinator-list"
-                      className="flex flex-wrap gap-2 font-semibold justify-between"
-                    >
-                      Lista de coordinadores
-                      <LuUserCog className="text-black-100" />
-                    </Link>
-                  </NavigationMenuLink>
+                  {localStorage.getItem("role") === "rrhh" && (
+                    <NavigationMenuLink>
+                      <Link
+                        to="/coordinator-list"
+                        className="flex flex-wrap gap-2 font-semibold justify-between"
+                      >
+                        Lista de coordinadores
+                        <LuUserCog className="text-black-100" />
+                      </Link>
+                    </NavigationMenuLink>
+                  )}
                 </div>
               </NavigationMenuContent>
             </NavigationMenuItem>

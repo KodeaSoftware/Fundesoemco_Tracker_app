@@ -41,7 +41,7 @@ export const createProject = async (project) => {
             throw new Error(`Error al crear el proyecto: ${response.status} ${response.statusText}`);
         }
 
-        const data = await response.json(); 7
+        const data = await response.json();
         //window.location.reload()
         console.log(project)
         return data;

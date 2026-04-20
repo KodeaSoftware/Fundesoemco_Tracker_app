@@ -27,15 +27,15 @@ export const createCoordinador = async (coordinador) => {
     });
 
     if (!response.ok) {
-      throw new Error(`Error al crear empleado: ${response.status} ${response.statusText}`);
+      throw new Error(`Error al crear coordinador: ${response.status} ${response.statusText}`);
     }
 
     const data = await response.json();
-    console.log('Empleado creado:', data);
+    console.log('Coordinador creado:', data);
     window.location.reload()
     return data;
   } catch (error) {
-    console.error('Error en createEmployee:', error);
+    console.error('Error en createCoordinador:', error);
     throw error;
   }
 };
@@ -52,7 +52,7 @@ export const updateCoordinador = async (updates) => {
     });
 
     if (!response.ok) {
-      throw new Error(`Error al actualizar empleado: ${response.status} ${response.statusText}`);
+      throw new Error(`Error al actualizar coordinador: ${response.status} ${response.statusText}`);
     }
 
     const data = await response.json();
@@ -60,7 +60,7 @@ export const updateCoordinador = async (updates) => {
     window.location.reload()
     return data;
   } catch (error) {
-    console.error('Error en updateEmployee:', error);
+    console.error('Error en updateCoordinador:', error);
     throw error;
   }
 };
@@ -68,7 +68,7 @@ export const updateCoordinador = async (updates) => {
 // 🗑️ Delete coordinador by ID
 export const deleteCoordinador = async (id) => {
   try {
-    const response = await fetch(`${API_URL}/api/coordinator`, {
+    const response = await fetch(`${API_URL}/api/coordinator/${id}`, {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
@@ -80,11 +80,11 @@ export const deleteCoordinador = async (id) => {
     }
 
     const data = await response.json();
-    console.log('Empleado eliminado:', data);
+    console.log('Coordinador eliminado:', data);
     window.location.reload()
     return data;
   } catch (error) {
-    console.error('Error en deleteEmployee:', error);
+    console.error('Error en deleteCoordinador:', error);
     throw error;
   }
 };

@@ -19,7 +19,8 @@ function ProjectCard(props) {
         projectDesc: props.desc,
         createdAt: props.createAt,
         id: props.id,
-        jornada: props.jornada
+        jornada: props.jornada,
+        estado: props.estado
       }
     });
   };

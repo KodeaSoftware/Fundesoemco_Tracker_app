@@ -56,10 +56,9 @@ function RegistroAsistencia() {
       try {
         setLoading(true);
         const data = await getAttendance();
-        if (data) {
-          setAttendanceData(data);
-          setFilteredData(data);
-        }
+        const attendanceList = data || [];
+        setAttendanceData(attendanceList);
+        setFilteredData(attendanceList);
       } catch (error) {
         console.error('Error al cargar datos de asistencia:', error);
       } finally {
@@ -75,11 +74,16 @@ function RegistroAsistencia() {
     if (searchTerm.trim() === "") {
       setFilteredData(attendanceData);
     } else {
-      const filtered = attendanceData.filter(item =>
-        item.empleado.nombre.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        item.cedula.includes(searchTerm) ||
-        item.empleado.departamento.toLowerCase().includes(searchTerm.toLowerCase())
-      );
+      const filtered = attendanceData.filter(item => {
+        const nombre = item.empleado?.nombre?.toLowerCase() || '';
+        const cedula = String(item.cedula || '');
+        const depto = item.empleado?.departamento?.toLowerCase() || '';
+        return (
+          nombre.includes(searchTerm.toLowerCase()) ||
+          cedula.includes(searchTerm) ||
+          depto.includes(searchTerm.toLowerCase())
+        );
+      });
       setFilteredData(filtered);
     }
   }, [searchTerm, attendanceData]);
@@ -107,13 +111,14 @@ function RegistroAsistencia() {
         onChange={(e) => setSearchTerm(e.target.value)}
       />
       <Table>
-        <TableCaption>Listado de asistencia - {filteredData.length} empleados</TableCaption>
+        <TableCaption>Listado de asistencia - {filteredData.length} registros</TableCaption>
         <TableHeader className="bg-gray-50">
           <TableRow>
             <TableHead>Cédula</TableHead>
             <TableHead>Empleado</TableHead>
             <TableHead>Departamento</TableHead>
             <TableHead>Cargo</TableHead>
+            <TableHead>Fecha</TableHead>
             <TableHead>Estado</TableHead>
           </TableRow>
         </TableHeader>
@@ -125,13 +130,16 @@ function RegistroAsistencia() {
                   {item.cedula}
                 </TableCell>
                 <TableCell className="font-semibold max-w-[200px] truncate">
-                  {item.empleado.nombre}
+                  {item.empleado?.nombre || '—'}
                 </TableCell>
                 <TableCell className="max-w-[150px] truncate">
-                  {item.empleado.departamento}
+                  {item.empleado?.departamento || '—'}
                 </TableCell>
                 <TableCell className="font-semibold max-w-[150px] truncate">
-                  {item.empleado.cargo}
+                  {item.empleado?.cargo || '—'}
+                </TableCell>
+                <TableCell className="max-w-[120px] truncate">
+                  {formatDate(item.fecha_asistencia)}
                 </TableCell>
                 <TableCell className="max-w-[120px] truncate">
                   {renderStatusBadge(item.estado)}
@@ -140,7 +148,7 @@ function RegistroAsistencia() {
             ))
           ) : (
             <TableRow>
-              <TableCell colSpan={5} className="text-center">
+              <TableCell colSpan={6} className="text-center">
                 <span className="text-gray-500 text-lg">
                   {searchTerm ? 'No se encontraron empleados con ese criterio de búsqueda' : 'No hay datos de asistencia disponibles'}
                 </span>
@@ -155,10 +163,3 @@ function RegistroAsistencia() {
 
 export default RegistroAsistencia;
 
-/*
-
-<NoAsistioBadge />
-<RetardadoBadge />
-
-
-*/

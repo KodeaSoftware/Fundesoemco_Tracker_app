@@ -16,11 +16,11 @@ import { FaQrcode } from "react-icons/fa";
 import SelectComponent from "./SelectComponent.jsx";
 import { TbUserEdit } from "react-icons/tb";
 import { GoAlert } from "react-icons/go";
-import DeleteEmployeeModal from "./DeleteEmployeeModal.jsx";
+import DeleteConfirmationModal from "./DeleteConfirmationModal.jsx";
 import { useState } from "react";
 import QRCode from "qrcode";
 import { updateEmployee } from "../utils/employees.js";
-import { updateCoordinador } from "../utils/coordinator.js";
+import { updateCoordinador, deleteCoordinador } from "../utils/coordinator.js";
 
 function EditCoordinator(props) {
     const [open, setOpen] = useState(false);
@@ -149,7 +149,13 @@ function EditCoordinator(props) {
                             <p className="flex items-center gap-1 text-sm text-red-500 font-semibold mb-1">
                                 Zona de riesgo <GoAlert />
                             </p>
-                            <DeleteEmployeeModal id={props.id} />
+                            <DeleteConfirmationModal 
+                                id={props.id} 
+                                triggerText="Eliminar Coordinador"
+                                title="¿Eliminar Coordinador?"
+                                description="Esta acción eliminará al coordinador y sus asignaciones a proyectos. Esta acción no se puede deshacer."
+                                onConfirm={(id) => deleteCoordinador(id)}
+                            />
                         </div>
 
                         <DialogFooter className="flex justify-between">

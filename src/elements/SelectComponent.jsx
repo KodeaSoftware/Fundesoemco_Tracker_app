@@ -10,9 +10,9 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-export default function SelectComponent({ label, options = [], onChange }) {
+export default function SelectComponent({ label, options = [], onChange, value }) {
   return (
-    <Select onValueChange={onChange}>
+    <Select onValueChange={onChange} value={value}>
       <SelectTrigger className="w-full sm:w-[100%] cursor-pointer">
         <SelectValue placeholder="Selecciona una opción" />
       </SelectTrigger>

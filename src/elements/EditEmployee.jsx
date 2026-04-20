@@ -16,29 +16,44 @@ import { FaQrcode } from "react-icons/fa";
 import SelectComponent from "./SelectComponent";
 import { TbUserEdit } from "react-icons/tb";
 import { GoAlert } from "react-icons/go";
-import DeleteEmployeeModal from "./DeleteEmployeeModal";
-import { useState } from "react";
+import DeleteConfirmationModal from "./DeleteConfirmationModal";
+import { useState, useEffect } from "react";
 import QRCode from "qrcode";
-import { updateEmployee } from "../utils/employees.js";
+import { updateEmployee, deleteEmployee } from "../utils/employees.js";
+import { getProjects } from "../utils/projects.js";
+import { getContractTypes } from "../utils/contract.js";
 
 function EditEmployee(props) {
   const [open, setOpen] = useState(false);
   const [selectedContrato, setSelectedContrato] = useState(
-    props.contrato || ""
+    props.contrato ? String(props.contrato) : ""
   );
+  // props.proyecto is likely an array of IDs from the UI, so take the first one or a string
   const [selectedProyectos, setSelectedProyectos] = useState(
-    props.proyecto || ""
+    props.proyecto && props.proyecto[0] ? String(props.proyecto[0]) : ""
   );
 
-  const OPCIONES_CONTRATO = [
-    { value: "contratista", label: "Contratista" },
-    { value: "directo", label: "Directo" },
-  ];
+  const [proyectos, setProyectos] = useState([]);
+  const [tiposContrato, setTiposContrato] = useState([]);
 
-  const OPCIONES_PROYECTOS = [
-    { value: "cvc", label: "CVC" },
-    { value: "Fundesoemco", label: "Fundesoemco" },
-  ];
+  
+  useEffect(() => {
+    const cargarDatos = async () => {
+      try {
+        const proyectosData = await getProjects();
+        if (proyectosData && Array.isArray(proyectosData)) {
+          setProyectos(proyectosData.map(p => ({ value: String(p.id), label: p.titulo })));
+        }
+        const tiposData = await getContractTypes();
+        if (tiposData && Array.isArray(tiposData)) {
+          setTiposContrato(tiposData.map(t => ({ value: String(t.id), label: t.contract_type })));
+        }
+      } catch (error) {
+        console.error('Error cargando datos edit employee', error);
+      }
+    };
+    if (open) cargarDatos();
+  }, [open]);
 
   // Función para crear el QR
   async function handleCreateQR(event) {
@@ -67,7 +82,8 @@ function EditEmployee(props) {
       departamento: event.target.departamento.value,
       cargo: event.target.cargo.value,
       telefono: event.target.telefono.value,
-      contrato: selectedContrato,
+      contrato: selectedContrato ? parseInt(selectedContrato) : null,
+      proyecto: [selectedProyectos], // Assuming single selection for update based on UI constraints
     };
 
 
@@ -161,10 +177,23 @@ function EditEmployee(props) {
                 Contrato
               </label>
               <SelectComponent
-                label="Tipo de contrato"
-                options={OPCIONES_CONTRATO}
-                defaultValue={props.contrato}
+                options={tiposContrato.length ? tiposContrato : []}
+                value={selectedContrato}
                 onChange={(value) => setSelectedContrato(value)}
+                placeholder="Selecciona Contrato"
+              />
+
+              <label
+                htmlFor="employee-project"
+                className="text-sm font-medium text-gray-700 mt-2"
+              >
+                Proyecto
+              </label>
+              <SelectComponent
+                options={proyectos.length ? proyectos : []}
+                value={selectedProyectos}
+                onChange={(value) => setSelectedProyectos(value)}
+                placeholder="Selecciona Proyecto"
               />
             </div>
           </div>
@@ -175,7 +204,15 @@ function EditEmployee(props) {
               <p className="flex items-center gap-1 text-sm text-red-500 font-semibold mb-1">
                 Zona de riesgo <GoAlert />
               </p>
-              <DeleteEmployeeModal id={props.id} />
+              <DeleteConfirmationModal 
+                id={props.id} 
+                triggerText="Eliminar Empleado"
+                title="¿Eliminar Empleado?"
+                description="Se eliminará permanentemente al empleado y todos sus registros de asistencia."
+                onConfirm={(id) => {
+                  deleteEmployee(id);
+                }}
+              />
             </div>
 
             <DialogFooter className="flex justify-between">

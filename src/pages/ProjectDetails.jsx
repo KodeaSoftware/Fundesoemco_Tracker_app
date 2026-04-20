@@ -34,6 +34,8 @@ const ProjectDetails = () => {
   const [employeeDirecto, setEmployeeDirecto] = useState([]);
   const [loading, setLoading] = useState(true);
   const [projectData, setProjectData] = useState(null);
+  const [selectedEmployee, setSelectedEmployee] = useState(null);
+  const userRole = localStorage.getItem("role");
 
   const handleImageChange = (event) => {
     const file = event.target.files[0];
@@ -186,10 +188,17 @@ const ProjectDetails = () => {
               <CardHeader className="flex flex-row justify-between items-center">
                 <CardTitle>Descripción del Proyecto</CardTitle>
                 {projectData && (
-                  <EditProject
-                    project={projectData}
-                    onProjectUpdated={handleProjectUpdated}
-                  />
+                  <div className="flex items-center gap-3">
+                    {projectData?.estado === 'archivado' && (
+                      <span className="px-2 py-1 bg-amber-100 text-amber-700 border border-amber-200 rounded text-xs font-bold uppercase">
+                        Archivado
+                      </span>
+                    )}
+                    <EditProject
+                      project={projectData}
+                      onProjectUpdated={handleProjectUpdated}
+                    />
+                  </div>
                 )}
               </CardHeader>
               <CardContent>
@@ -200,7 +209,7 @@ const ProjectDetails = () => {
               </CardContent>
             </Card>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <Card>
                 <CardHeader className="flex flex-row justify-between items-center pl-7 pr-8">
                   <CardTitle>Coordinadores</CardTitle>
@@ -209,21 +218,30 @@ const ProjectDetails = () => {
                 <CardContent>
                   <Table>
                     <TableBody>
-                      <TableRow>
-                        <TableCell>Juan Director</TableCell>
-                      </TableRow>
-                      <TableRow>
-                        <TableCell>María Coordinadora</TableCell>
-                      </TableRow>
+                      {loading ? (
+                        <TableRow>
+                          <TableCell className="text-muted-foreground">Cargando...</TableCell>
+                        </TableRow>
+                      ) : projectData && projectData.coordinators && projectData.coordinators.length > 0 ? (
+                        projectData.coordinators.map((coord, index) => (
+                          <TableRow key={index}>
+                            <TableCell>{coord.nombre}</TableCell>
+                          </TableRow>
+                        ))
+                      ) : (
+                        <TableRow>
+                          <TableCell className="text-muted-foreground italic">Todavía no hay coordinadores asignados</TableCell>
+                        </TableRow>
+                      )}
                     </TableBody>
                   </Table>
                 </CardContent>
               </Card>
 
-              {/* Empleados Directos */}
+              {/* Empleados (Todos) */}
               <Card>
                 <CardHeader className="flex flex-row justify-between items-center pl-7 pr-8">
-                  <CardTitle>Empleados Directos</CardTitle>
+                  <CardTitle>Empleados Asignados</CardTitle>
                   <LuUsers className="text-blue-500" />
                 </CardHeader>
                 <CardContent>
@@ -233,48 +251,33 @@ const ProjectDetails = () => {
                         <TableRow>
                           <TableCell className="text-muted-foreground">Cargando...</TableCell>
                         </TableRow>
-                      ) : employeeDirecto && employeeDirecto.length > 0 ? (
-                        employeeDirecto.map((employee, index) => (
-                          <TableRow key={index}>
-                            <TableCell>
-                              {employee.nombre}
-                            </TableCell>
-                          </TableRow>
-                        ))
+                      ) : (employeeDirecto.length > 0 || employeeContratista.length > 0) ? (
+                        [
+                          ...employeeDirecto.map(e => ({ ...e, isContratista: false, tipo: e.tipoContrato, color: 'bg-blue-100 text-blue-700 border-blue-200' })),
+                          ...employeeContratista.map(e => ({ ...e, isContratista: true, tipo: e.tipoContrato, color: 'bg-purple-100 text-purple-700 border-purple-200' }))
+                        ]
+                          .sort((a, b) => a.nombre.localeCompare(b.nombre))
+                          .map((employee, index) => {
+                            const canViewDetails = !employee.isContratista || userRole === "rrhh";
+                            
+                            return (
+                              <TableRow 
+                                key={index} 
+                                className={canViewDetails ? "cursor-pointer hover:bg-gray-50" : ""}
+                                onClick={() => canViewDetails && setSelectedEmployee(employee)}
+                              >
+                                <TableCell className="flex justify-between items-center">
+                                  <span>{employee.nombre}</span>
+                                <span className={`text-[12px] font-bold px-3 py-0.7 rounded-full border ${employee.color}`}>
+                                  {employee.tipo}
+                                </span>
+                              </TableCell>
+                            </TableRow>
+                            );
+                          })
                       ) : (
                         <TableRow>
-                          <TableCell className="text-muted-foreground">No hay empleados directos asignados</TableCell>
-                        </TableRow>
-                      )}
-                    </TableBody>
-                  </Table>
-                </CardContent>
-              </Card>
-
-              {/* Contratistas */}
-              <Card>
-                <CardHeader className="flex flex-row justify-between items-center pl-7 pr-8">
-                  <CardTitle>Contratistas</CardTitle>
-                  <LuBuilding2 className="text-purple-500" />
-                </CardHeader>
-                <CardContent>
-                  <Table>
-                    <TableBody>
-                      {loading ? (
-                        <TableRow>
-                          <TableCell className="text-muted-foreground">Cargando...</TableCell>
-                        </TableRow>
-                      ) : employeeContratista && employeeContratista.length > 0 ? (
-                        employeeContratista.map((employee, index) => (
-                          <TableRow key={index}>
-                            <TableCell>
-                              {employee.nombre}
-                            </TableCell>
-                          </TableRow>
-                        ))
-                      ) : (
-                        <TableRow>
-                          <TableCell className="text-muted-foreground">No hay contratistas asignados</TableCell>
+                          <TableCell className="text-muted-foreground italic">No hay empleados asignados</TableCell>
                         </TableRow>
                       )}
                     </TableBody>
@@ -283,6 +286,46 @@ const ProjectDetails = () => {
               </Card>
             </div>
           </div>
+          
+          <Dialog open={!!selectedEmployee} onOpenChange={(open) => !open && setSelectedEmployee(null)}>
+            <DialogContent className="sm:max-w-[425px]">
+              <DialogHeader>
+                <DialogTitle>Información del Empleado</DialogTitle>
+              </DialogHeader>
+              {selectedEmployee && (
+                <div className="space-y-4 pt-4">
+                  <div className="grid grid-cols-3 items-center gap-4">
+                    <span className="text-sm font-medium text-gray-500">Nombre</span>
+                    <span className="col-span-2 font-semibold text-gray-900">{selectedEmployee.nombre}</span>
+                  </div>
+                  <div className="grid grid-cols-3 items-center gap-4">
+                    <span className="text-sm font-medium text-gray-500">Cédula</span>
+                    <span className="col-span-2 text-gray-900">{selectedEmployee.cedula}</span>
+                  </div>
+                  <div className="grid grid-cols-3 items-center gap-4">
+                    <span className="text-sm font-medium text-gray-500">Dpto.</span>
+                    <span className="col-span-2 text-gray-900">{selectedEmployee.departamento}</span>
+                  </div>
+                  <div className="grid grid-cols-3 items-center gap-4">
+                    <span className="text-sm font-medium text-gray-500">Cargo</span>
+                    <span className="col-span-2 text-gray-900">{selectedEmployee.cargo}</span>
+                  </div>
+                  <div className="grid grid-cols-3 items-center gap-4">
+                    <span className="text-sm font-medium text-gray-500">Teléfono</span>
+                    <span className="col-span-2 text-gray-900">{selectedEmployee.telefono}</span>
+                  </div>
+                  <div className="grid grid-cols-3 items-center gap-4">
+                    <span className="text-sm font-medium text-gray-500">Contrato</span>
+                    <span className="col-span-2 text-gray-900">
+                      <span className={`text-[12px] font-bold px-3 py-0.5 rounded-full border ${selectedEmployee.color}`}>
+                        {selectedEmployee.tipo}
+                      </span>
+                    </span>
+                  </div>
+                </div>
+              )}
+            </DialogContent>
+          </Dialog>
         </motion.div>
       </PageLayout>
     </>
