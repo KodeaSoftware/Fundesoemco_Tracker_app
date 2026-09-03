@@ -1,6 +1,8 @@
+import { API_URL } from "../config/config.env";
+
 export const login = async (auth) => {
     try {
-        const response = await fetch('http://localhost:4123/auth', {
+        const response = await fetch(`${API_URL}/auth`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -13,8 +15,6 @@ export const login = async (auth) => {
         }
 
         const data = await response.json();
-        console.log('Login exitoso:', data);
-        window.location = "/"
         return data;
     } catch (error) {
         console.error('Error en login:', error);
@@ -24,7 +24,7 @@ export const login = async (auth) => {
 
 export const forgotPassword = async (correo) => {
     try {
-        const response = await fetch('http://localhost:4123/auth/forgot-password', {
+        const response = await fetch(`${API_URL}/auth/forgot-password`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ correo }),
@@ -44,7 +44,7 @@ export const forgotPassword = async (correo) => {
 
 export const resetPassword = async (data) => {
     try {
-        const response = await fetch('http://localhost:4123/auth/reset-password', {
+        const response = await fetch(`${API_URL}/auth/reset-password`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(data),

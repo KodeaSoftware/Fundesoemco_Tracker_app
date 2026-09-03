@@ -4,6 +4,9 @@ import { FaFileExcel, FaDownload } from "react-icons/fa6";
 import { downloadEmployeeTemplate, bulkUploadEmployeesExcel } from "@/utils/employees";
 import { getEmployees } from "@/utils/employees";
 
+import { getProjects } from "@/utils/projects";
+import { getContractTypes } from "@/utils/contract";
+
 export default function EmployeeBulk({ onUpload }) {
   const [loading, setLoading] = useState(false);
 
@@ -12,6 +15,26 @@ export default function EmployeeBulk({ onUpload }) {
       await downloadEmployeeTemplate();
     } catch (err) {
       alert("Error al descargar la plantilla: " + err.message);
+    }
+  };
+
+  const handleUploadClick = async () => {
+    try {
+      const projects = await getProjects();
+      if (!projects || projects.length === 0) {
+        alert("Primero debes crear al menos un proyecto antes de realizar la carga masiva de empleados.");
+        return;
+      }
+
+      const contracts = await getContractTypes();
+      if (!contracts || contracts.length === 0) {
+        alert("Primero debes registrar al menos un tipo de contrato en 'Gestionar Contratos' antes de realizar la carga masiva de empleados.");
+        return;
+      }
+
+      document.getElementById("excel-upload-input").click();
+    } catch (err) {
+      document.getElementById("excel-upload-input").click();
     }
   };
 
@@ -52,7 +75,7 @@ export default function EmployeeBulk({ onUpload }) {
         variant="secondary"
         size="sm"
         disabled={loading}
-        onClick={() => document.getElementById("excel-upload-input").click()}
+        onClick={handleUploadClick}
         className="cursor-pointer hover:bg-gray-200"
       >
         <FaFileExcel className="mr-2 text-green-700" />

@@ -1,12 +1,12 @@
-import { API_URL } from "../config/config.env";
+import { apiClient } from "./apiClient";
+
 export const getEmployees = async () => {
   try {
-    const response = await fetch(`${API_URL}/api/employee`);
+    const response = await apiClient("/api/employee");
     if (!response.ok) {
       throw new Error(`Error al obtener empleados: ${response.status} ${response.statusText}`);
     }
     const data = await response.json();
-    console.log(data)
     return data.Data;
   } catch (error) {
     console.error('Error en getEmployees:', error);
@@ -17,11 +17,8 @@ export const getEmployees = async () => {
 
 export const createEmployee = async (employee) => {
   try {
-    const response = await fetch(`${API_URL}/api/employee`, {
+    const response = await apiClient("/api/employee", {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
       body: JSON.stringify(employee),
     });
 
@@ -30,8 +27,6 @@ export const createEmployee = async (employee) => {
     }
 
     const data = await response.json();
-    console.log('Empleado creado:', data);
-    window.location.reload()
     return data;
   } catch (error) {
     console.error('Error en createEmployee:', error);
@@ -41,15 +36,11 @@ export const createEmployee = async (employee) => {
 
 
 
-
 // ✏️ Update employee by ID
 export const updateEmployee = async (updates) => {
   try {
-    const response = await fetch(`${API_URL}/api/employee/`, {
+    const response = await apiClient("/api/employee/", {
       method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-      },
       body: JSON.stringify(updates),
     });
 
@@ -58,8 +49,6 @@ export const updateEmployee = async (updates) => {
     }
 
     const data = await response.json();
-    console.log('Empleado actualizado:', data);
-    window.location.reload()
     return data;
   } catch (error) {
     console.error('Error en updateEmployee:', error);
@@ -70,11 +59,8 @@ export const updateEmployee = async (updates) => {
 // 🗑️ Delete employee by ID
 export const deleteEmployee = async (id) => {
   try {
-    const response = await fetch(`${API_URL}/api/employee/${id}`, {
+    const response = await apiClient(`/api/employee/${id}`, {
       method: 'DELETE',
-      headers: {
-        'Content-Type': 'application/json',
-      },
     });
 
     if (!response.ok) {
@@ -82,8 +68,6 @@ export const deleteEmployee = async (id) => {
     }
 
     const data = await response.json();
-    console.log('Empleado eliminado:', data);
-    window.location.reload()
     return data;
   } catch (error) {
     console.error('Error en deleteEmployee:', error);
@@ -94,7 +78,7 @@ export const deleteEmployee = async (id) => {
 
 export const getAttendance = async () => {
   try {
-    const response = await fetch(`${API_URL}/api/employee/attendance`);
+    const response = await apiClient("/api/employee/attendance");
     if (!response.ok) {
       throw new Error(`Error al obtener asistencia: ${response.status} ${response.statusText}`);
     }
@@ -115,11 +99,8 @@ export const getAttendance = async () => {
 // 📝 Record attendance for an employee
 export const recordAttendance = async (cedula, idProject) => {
   try {
-    const response = await fetch(`${API_URL}/api/employee/attendance`, {
+    const response = await apiClient("/api/employee/attendance", {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
       body: JSON.stringify({ cedula: parseInt(cedula), idProject }),
     });
 
@@ -129,7 +110,6 @@ export const recordAttendance = async (cedula, idProject) => {
     }
 
     const data = await response.json();
-    console.log("Asistencia registrada:", data);
     return data;
   } catch (error) {
     console.error("Error en recordAttendance:", error);
@@ -204,7 +184,7 @@ export const formatAttendanceForChart = (attendanceData) => {
 // 📥 Download Excel template
 export const downloadEmployeeTemplate = async () => {
   try {
-    const response = await fetch(`${API_URL}/api/employee/template`);
+    const response = await apiClient("/api/employee/template");
     if (!response.ok) throw new Error("Error al descargar la plantilla");
     
     const blob = await response.blob();
@@ -228,7 +208,7 @@ export const bulkUploadEmployeesExcel = async (file) => {
     const formData = new FormData();
     formData.append('file', file);
 
-    const response = await fetch(`${API_URL}/api/employee/bulk`, {
+    const response = await apiClient("/api/employee/bulk", {
       method: "POST",
       body: formData,
     });
@@ -245,7 +225,3 @@ export const bulkUploadEmployeesExcel = async (file) => {
     throw error;
   }
 };
-
-
-
-

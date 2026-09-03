@@ -9,7 +9,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -23,11 +23,13 @@ import { FaCamera } from "react-icons/fa";
 import { motion } from "motion/react";
 import { pageAnimationsParams } from "../motion/pageAnimation";
 import { LuUserCog, LuUsers, LuBuilding2 } from "react-icons/lu";
-import { getEmployeeByIdProjecAndContract, getProjectById } from "../utils/projects"
+import { getEmployeeByIdProjecAndContract, getProjectById, deleteProject } from "../utils/projects"
 import EditProject from "../elements/EditProject";
+import DeleteConfirmationModal from "../elements/DeleteConfirmationModal";
 
 const ProjectDetails = () => {
   const location = useLocation();
+  const navigate = useNavigate();
   const { projectName, projectDesc, createdAt, id, jornada } = location.state || {};
   const [backgroundImage, setBackgroundImage] = useState("/img-login.webp");
   const [employeeContratista, setEmployeeContratista] = useState([]);
@@ -36,6 +38,15 @@ const ProjectDetails = () => {
   const [projectData, setProjectData] = useState(null);
   const [selectedEmployee, setSelectedEmployee] = useState(null);
   const userRole = localStorage.getItem("role");
+
+  const handleDeleteProject = async (projectId) => {
+    try {
+      await deleteProject(projectId);
+      navigate("/project-list");
+    } catch (error) {
+      alert("Error al eliminar el proyecto: " + error.message);
+    }
+  };
 
   const handleImageChange = (event) => {
     const file = event.target.files[0];
@@ -198,6 +209,15 @@ const ProjectDetails = () => {
                       project={projectData}
                       onProjectUpdated={handleProjectUpdated}
                     />
+                    {userRole === "rrhh" && (
+                      <DeleteConfirmationModal
+                        triggerText="Eliminar Proyecto"
+                        title="¿Eliminar proyecto?"
+                        description={`¿Estás seguro de que deseas eliminar "${projectData.titulo}"? Esta acción eliminará el proyecto y sus asignaciones asociadas.`}
+                        id={projectData.id}
+                        onConfirm={handleDeleteProject}
+                      />
+                    )}
                   </div>
                 )}
               </CardHeader>

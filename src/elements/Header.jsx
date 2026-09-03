@@ -181,6 +181,17 @@ function Header(props) {
                       </Link>
                     </NavigationMenuLink>
                   )}
+                  {localStorage.getItem("role") === "rrhh" && (
+                    <NavigationMenuLink>
+                      <Link
+                        to="/rrhh-list"
+                        className="flex flex-wrap gap-2 font-semibold justify-between"
+                      >
+                        Lista de RRHH
+                        <FiUsers className="text-black-100" />
+                      </Link>
+                    </NavigationMenuLink>
+                  )}
                 </div>
               </NavigationMenuContent>
             </NavigationMenuItem>

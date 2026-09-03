@@ -1,13 +1,13 @@
-import { API_URL } from "../config/config.env";
+import { apiClient } from "./apiClient";
+
 // get coordinadores
 export const getCoordinadores = async () => {
   try {
-    const response = await fetch(`${API_URL}/api/coordinator`);
+    const response = await apiClient("/api/coordinator");
     if (!response.ok) {
       throw new Error(`Error al obtener coordinadores: ${response.status} ${response.statusText}`);
     }
     const data = await response.json();
-    console.log(data)
     return data.Data;
   } catch (error) {
     console.error('Error en getCoordinator:', error);
@@ -18,11 +18,8 @@ export const getCoordinadores = async () => {
 // Crear Coordinador
 export const createCoordinador = async (coordinador) => {
   try {
-    const response = await fetch(`${API_URL}/api/coordinator`, {
+    const response = await apiClient("/api/coordinator", {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
       body: JSON.stringify(coordinador),
     });
 
@@ -31,8 +28,6 @@ export const createCoordinador = async (coordinador) => {
     }
 
     const data = await response.json();
-    console.log('Coordinador creado:', data);
-    window.location.reload()
     return data;
   } catch (error) {
     console.error('Error en createCoordinador:', error);
@@ -43,11 +38,8 @@ export const createCoordinador = async (coordinador) => {
 // Actualizar Coordinador por ID 
 export const updateCoordinador = async (updates) => {
   try {
-    const response = await fetch(`${API_URL}/api/coordinator`, {
+    const response = await apiClient("/api/coordinator", {
       method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-      },
       body: JSON.stringify(updates),
     });
 
@@ -56,8 +48,6 @@ export const updateCoordinador = async (updates) => {
     }
 
     const data = await response.json();
-    console.log('Empleado actualizado:', data);
-    window.location.reload()
     return data;
   } catch (error) {
     console.error('Error en updateCoordinador:', error);
@@ -68,11 +58,8 @@ export const updateCoordinador = async (updates) => {
 // 🗑️ Delete coordinador by ID
 export const deleteCoordinador = async (id) => {
   try {
-    const response = await fetch(`${API_URL}/api/coordinator/${id}`, {
+    const response = await apiClient(`/api/coordinator/${id}`, {
       method: 'DELETE',
-      headers: {
-        'Content-Type': 'application/json',
-      },
     });
 
     if (!response.ok) {
@@ -80,8 +67,6 @@ export const deleteCoordinador = async (id) => {
     }
 
     const data = await response.json();
-    console.log('Coordinador eliminado:', data);
-    window.location.reload()
     return data;
   } catch (error) {
     console.error('Error en deleteCoordinador:', error);

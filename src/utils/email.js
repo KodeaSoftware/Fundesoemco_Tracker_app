@@ -1,12 +1,9 @@
-import { API_URL } from "../config/config.env";
+import { apiClient } from "./apiClient";
 
 export const sendPassword = async (data) => {
     try {
-        const response = await fetch(`${API_URL}/api/email/send-password`, {
+        const response = await apiClient("/api/email/send-password", {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
             body: JSON.stringify(data),
         });
 
