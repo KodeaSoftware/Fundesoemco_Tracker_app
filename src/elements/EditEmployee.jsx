@@ -209,8 +209,14 @@ function EditEmployee(props) {
                 triggerText="Eliminar Empleado"
                 title="¿Eliminar Empleado?"
                 description="Se eliminará permanentemente al empleado y todos sus registros de asistencia."
-                onConfirm={(id) => {
-                  deleteEmployee(id);
+                onConfirm={async (id) => {
+                  try {
+                    await deleteEmployee(id);
+                    setOpen(false);
+                    window.location.reload();
+                  } catch (err) {
+                    alert("Error al eliminar empleado: " + err.message);
+                  }
                 }}
               />
             </div>

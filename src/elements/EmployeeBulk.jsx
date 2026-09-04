@@ -45,7 +45,20 @@ export default function EmployeeBulk({ onUpload }) {
     setLoading(true);
     try {
       const results = await bulkUploadEmployeesExcel(file);
-      alert(`Éxito: ${results.created} empleados creados.${results.errors.length > 0 ? '\nErrores: ' + results.errors.join(', ') : ''}`);
+      
+      let msg = `Carga masiva completada:\n• Creados: ${results.created} empleados`;
+      if (results.skipped) {
+        msg += `\n• Ya existentes (omitidos): ${results.skipped}`;
+      }
+      if (results.errors && results.errors.length > 0) {
+        const maxDisplay = 8;
+        const errList = results.errors.slice(0, maxDisplay).join('\n• ');
+        msg += `\n\nErrores (${results.errors.length}):\n• ${errList}`;
+        if (results.errors.length > maxDisplay) {
+          msg += `\n... y ${results.errors.length - maxDisplay} errores más.`;
+        }
+      }
+      alert(msg);
       
       if (onUpload) {
         const data = await getEmployees();
