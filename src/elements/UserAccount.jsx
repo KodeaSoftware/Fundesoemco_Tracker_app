@@ -73,6 +73,7 @@ function UserAccount({ email, photo }) {
                   localStorage.removeItem("token");
                   localStorage.removeItem("correo");
                   localStorage.removeItem("role");
+                  localStorage.removeItem("nombre");
                   window.location.href = "/login";
                 }}
               >

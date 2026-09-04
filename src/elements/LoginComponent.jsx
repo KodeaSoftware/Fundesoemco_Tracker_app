@@ -42,6 +42,9 @@ function LoginComponent() {
         localStorage.setItem("token", auth.token);
         localStorage.setItem("role", auth.role);
         localStorage.setItem("correo", auth.correo);
+        if (auth.nombre) {
+          localStorage.setItem("nombre", auth.nombre);
+        }
         // Redirigir al dashboard
         window.location.href = "/";
       } else {
