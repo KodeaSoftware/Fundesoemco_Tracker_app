@@ -11,13 +11,38 @@ export const login = async (auth) => {
         });
 
         if (!response.ok) {
-            throw new Error(`Error al iniciar sesión: ${response.status} ${response.statusText}`);
+            let serverError = "";
+            try {
+                const errorData = await response.json();
+                serverError = errorData?.message || "";
+            } catch {
+                // Si la respuesta no es JSON válido
+            }
+
+            // Si el backend responde con error de credenciales o 500, mostrar mensaje amigable
+            if (
+                response.status === 401 ||
+                response.status === 404 ||
+                response.status === 500 ||
+                serverError.includes("500") ||
+                serverError.toLowerCase().includes("internal") ||
+                serverError.toLowerCase().includes("contrase") ||
+                serverError.toLowerCase().includes("encontrado") ||
+                serverError.toLowerCase().includes("failed auth")
+            ) {
+                throw new Error("Correo o contraseña incorrectos");
+            }
+
+            throw new Error(serverError || "Correo o contraseña incorrectos");
         }
 
         const data = await response.json();
         return data;
     } catch (error) {
         console.error('Error en login:', error);
+        if (error.name === "TypeError" && error.message.includes("fetch")) {
+            throw new Error("No se pudo conectar con el servidor. Por favor, intenta de nuevo.");
+        }
         throw error;
     }
 }
